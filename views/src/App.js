@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import MovieList from './components/MovieList';
-import EmployeeContextProvider from './contexts/EmployeeContext';
+import EmployeeContextProvider from './contexts/MovieContext';
 import Axios from 'axios';
 
 function App() {

@@ -1,14 +1,13 @@
 import {useContext, useState, useEffect} from 'react';
-import {EmployeeContext} from '../contexts/EmployeeContext';
+import {MovieContext} from '../contexts/MovieContext';
 import { Modal, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import EditForm from './EditForm'
 import Axios from 'axios';
 
 
+const Movie = ({movie}) => {
 
-const Employee = ({employee}) => {
-
-    const {deleteEmployee} = useContext(EmployeeContext)
+    const {deleteMovie} = useContext(MovieContext)
 
     const [show, setShow] = useState(false);
     
@@ -17,15 +16,15 @@ const Employee = ({employee}) => {
 
     useEffect(() => {
         handleClose()
-    }, [employee])
+    }, [Movie])
 
 
     return (
         <>
-            <td>{employee.name}</td>
-            <td>{employee.email}</td>
-            <td>{employee.address}</td>
-            <td>{employee.phone}</td>
+            <td>{movie.id}</td>
+            <td>{movie.name}</td>
+            <td>{movie.year}</td>
+            <td>{movie.rank}</td>
             <td>
                 <OverlayTrigger
                     overlay={
@@ -41,7 +40,7 @@ const Employee = ({employee}) => {
                             Delete
                         </Tooltip>
                     }>
-                    <button onClick={() => deleteEmployee(employee.id)}  className="btn text-danger btn-act" data-toggle="modal"><i className="material-icons">&#xE872;</i></button>
+                    <button onClick={() => deleteMovie(movie.id)}  className="btn text-danger btn-act" data-toggle="modal"><i className="material-icons">&#xE872;</i></button>
                 </OverlayTrigger>
                 
                 
@@ -50,11 +49,11 @@ const Employee = ({employee}) => {
             <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
             <Modal.Title>
-                Edit Employee
+                Edit Movie
             </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <EditForm theEmployee={employee} />
+            <EditForm theMovie={Movie} />
         </Modal.Body>
         <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
@@ -66,4 +65,4 @@ const Employee = ({employee}) => {
     )
 }
 
-export default Employee;
+export default Movie;

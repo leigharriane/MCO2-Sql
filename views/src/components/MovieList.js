@@ -1,13 +1,14 @@
 import { Modal, Button, Alert} from 'react-bootstrap';
 import {useContext, useEffect, useState } from 'react';
-import {EmployeeContext} from '../contexts/EmployeeContext';
-import Employee from './Employee';
+import {MovieContext} from '../contexts/MovieContext';
 import AddForm from './AddForm';
 import Pagination from './Pagination';
+import Movie from './Movie.js';
+
 
 const MovieList = () => {
 
-    const {sortedEmployees} = useContext(EmployeeContext);
+    const {sortedMovies} = useContext(MovieContext);
 
     const [showAlert, setShowAlert] = useState(false);
 
@@ -15,10 +16,9 @@ const MovieList = () => {
     
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
-    //const handleShowAlert = () =>setShowAlert(true);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [employeesPerPage] = useState(10)
+    const [MoviesPerPage] = useState(10)
 
     const handleShowAlert = () => {
         setShowAlert(true);
@@ -33,20 +33,19 @@ const MovieList = () => {
         return () => {
             handleShowAlert();
         }
-    }, [sortedEmployees])
+    }, [sortedMovies])
 
-    const indexOfLastEmployee = currentPage * employeesPerPage;
-    const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
-    const currentEmployees = sortedEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
-    const totalPagesNum = Math.ceil(sortedEmployees.length / employeesPerPage);
-
+    const indexOfLastMovie = currentPage * MoviesPerPage;
+    const indexOfFirstMovie = indexOfLastMovie - MoviesPerPage;
+    const currentMovies = sortedMovies.slice(indexOfFirstMovie, indexOfLastMovie);
+    const totalPagesNum = Math.ceil(sortedMovies.length / MoviesPerPage);
 
     return (
     <>
     <div className="table-title">
         <div className="row">
             <div className="col-sm-6">
-                <h2>Manage <b>Movies</b></h2>
+                <h2><b> Movies List </b></h2>
             </div>
             <div className="col-sm-6">
                 <Button onClick={handleShow} className="btn btn-success" data-toggle="modal"><i className="material-icons">&#xE147;</i> <span>Add New Movie</span></Button>					
@@ -71,9 +70,9 @@ const MovieList = () => {
         <tbody>
 
                 {
-                  currentEmployees.map(employee => (
-                      <tr key={employee.id}>
-                        <Employee employee={employee} />
+                  currentMovies.map(movie => (
+                      <tr key={Movie.id}>
+                        <Movie movie={movie} />
                     </tr>
                   ))  
                 }
@@ -83,9 +82,9 @@ const MovieList = () => {
     </table>
 
     <Pagination pages = {totalPagesNum}
-                setCurrentPage={setCurrentPage}
-                currentEmployees ={currentEmployees}
-                sortedEmployees = {sortedEmployees} />
+                setCurrentPage = {setCurrentPage}
+                currentMovies = {currentMovies}
+                sortedMovies = {sortedMovies} />
 
     <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
