@@ -1,4 +1,4 @@
-import EmployeeList from './components/EmployeeList';
+import MovieList from './components/MovieList';
 import EmployeeContextProvider from './contexts/EmployeeContext';
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
       <div className="table-responsive">
         <div className="table-wrapper">
           <EmployeeContextProvider>
-            <EmployeeList />
+            <MovieList />
           </EmployeeContextProvider>
         </div>
       </div>
