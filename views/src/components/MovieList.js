@@ -5,7 +5,7 @@ import Employee from './Employee';
 import AddForm from './AddForm';
 import Pagination from './Pagination';
 
-const EmployeeList = () => {
+const MovieList = () => {
 
     const {sortedEmployees} = useContext(EmployeeContext);
 
@@ -46,7 +46,7 @@ const EmployeeList = () => {
     <div className="table-title">
         <div className="row">
             <div className="col-sm-6">
-                <h2>Manage <b>Employees</b></h2>
+                <h2>Manage <b>Movies</b></h2>
             </div>
             <div className="col-sm-6">
                 <Button onClick={handleShow} className="btn btn-success" data-toggle="modal"><i className="material-icons">&#xE147;</i> <span>Add New Movie</span></Button>					
@@ -55,7 +55,7 @@ const EmployeeList = () => {
     </div>
 
     <Alert show={showAlert} variant="success">
-        Emlployee List Updated Succefully!
+        Movie List Updated Succefully!
     </Alert>
 
     <table className="table table-striped table-hover">
@@ -90,7 +90,7 @@ const EmployeeList = () => {
     <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
             <Modal.Title>
-                Add Employee
+                Add Movie
             </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -106,4 +106,4 @@ const EmployeeList = () => {
     )
 }
 
-export default EmployeeList;
+export default MovieList;
