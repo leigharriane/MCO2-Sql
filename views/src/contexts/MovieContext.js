@@ -1,11 +1,25 @@
 import {createContext, useEffect, useState} from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import Axios from 'axios';
 
 export const MovieContext = createContext()
 
 const MovieContextProvider  = (props) => {
 
-    const [Movies, setMovies] = useState([
+    const [data, setData] = useState ([])
+    useEffect(()=>{
+      Axios.get("http://localhost:3001/readAll").then((response) =>{
+        console.log("ANSWER")
+        setData(response.data);
+        console.log(response.data)
+      }).catch((err)=>{
+        console.log(err);
+      });
+      console.log("hatdog");
+      console.log(data);
+    },[])
+
+    const [movies, setMovies] = useState([
         {id:uuidv4(), name: 'Thomas Hardy10', year: 'thomashardy@mail.com', rank: '(171) 555-2222'},
         {id:uuidv4(), name: 'Dominique Perrier', year: 'dominiqueperrier@mail.com', rank: '(313) 555-5735'},
         {id:uuidv4(), name: 'Maria Anders', year: 'mariaanders@mail.com', rank: '(503) 555-9931'},
@@ -14,29 +28,32 @@ const MovieContextProvider  = (props) => {
 ])
 
 useEffect(()=> {
-    setMovies(JSON.parse(localStorage.getItem('Movies')))
+    // console.log(movies);
+    // setMovies(JSON.parse(localStorage.getItem('movies')))
+    // console.log(movies);
+    setMovies(data);
 },[])
 
 useEffect(() => {
-    localStorage.setItem('Movies', JSON.stringify(Movies));
+    localStorage.setItem('movies', JSON.stringify(data));
 })
 
 
 
-const sortedMovies = Movies.sort((a,b)=>(a.name < b.name ? -1 : 1));
+const sortedMovies = movies.sort((a,b)=>(a.name < b.name ? -1 : 1));
 
 
 
 const addMovie = (name, rank, year) => {
-    setMovies([...Movies , {id:uuidv4(), name, year, rank}])
+    setMovies([...movies , {id:uuidv4(), name, year, rank}])
 }
 
 const deleteMovie = (id) => {
-    setMovies(Movies.filter(Movie => Movie.id !== id))
+    setMovies(movies.filter(movie => movie.id !== id))
 }
 
 const updateMovie = (id, updatedMovie) => {
-    setMovies(Movies.map((Movie) => Movie.id === id ? updatedMovie : Movie))
+    setMovies(movies.map((movie) => movie.id === id ? updatedMovie : movie))
 }
 
     return (
