@@ -1,37 +1,32 @@
 import { Form, Button } from "react-bootstrap"
-
-import {EmployeeContext} from '../contexts/EmployeeContext';
 import {useContext, useState} from 'react';
-
-
+// import {MovieContext} from '../contexts/MovieContext';
 
 const AddForm = () =>{
 
-    const {addEmployee} = useContext(EmployeeContext);
+    //const {addMovie} = useContext(MovieContext);
 
-    const [newEmployee, setNewEmployee] = useState({
+    const [newMovie, setNewMovie] = useState({
         name:"", email:"", phone:"", address:""
     });
 
     const onInputChange = (e) => {
-        setNewEmployee({...newEmployee,[e.target.name]: e.target.value})
+        setNewMovie({...newMovie,[e.target.name]: e.target.value})
     }
 
-    const {name, email, phone, address} = newEmployee;
+    const {name, year, rank} = newMovie;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        addEmployee(name, email, phone, address);
-    }
-
-     return (
-
+        //addMovie(name, year, rank);
+    }; return (
         <Form onSubmit={handleSubmit}>
             <Form.Group>
                 <Form.Control
                     type="text"
                     placeholder="Name *"
                     name="name"
+                    classname="form-field"
                     value={name}
                     onChange = { (e) => onInputChange(e)}
                     required
@@ -40,9 +35,10 @@ const AddForm = () =>{
             <Form.Group>
                 <Form.Control
                     type="email"
-                    placeholder="Email *"
-                    name="email"
-                    value={email}
+                    placeholder="Year *"
+                    name="year"
+                    classname="form-field"
+                    value={year}
                     onChange = { (e) => onInputChange(e)}
                     required
                 />
@@ -50,24 +46,16 @@ const AddForm = () =>{
             <Form.Group>
                 <Form.Control
                     as="textarea"
-                    placeholder="Address"
+                    placeholder="Rank"
                     rows={3}
-                    name="address"
-                    value={address}
-                    onChange = { (e) => onInputChange(e)}
-                />
-            </Form.Group>
-            <Form.Group>
-                <Form.Control
-                    type="text"
-                    placeholder="Phone"
-                    name="phone"
-                    value={phone}
+                    name="rank"
+                    classname="form-field"
+                    value={rank}
                     onChange = { (e) => onInputChange(e)}
                 />
             </Form.Group>
             <Button variant="success" type="submit" block>
-                Add New Movie
+                Add Movie
             </Button>
         </Form>
 

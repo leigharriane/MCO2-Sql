@@ -1,13 +1,13 @@
 import { Modal, Button, Alert} from 'react-bootstrap';
 import {useContext, useEffect, useState } from 'react';
-import {EmployeeContext} from '../contexts/EmployeeContext';
-import Employee from './Employee';
+import {MovieContext} from '../contexts/MovieContext';
+import Movie from './Movie';
 import AddForm from './AddForm';
 import Pagination from './Pagination';
 
 const MovieList = () => {
 
-    const {sortedEmployees} = useContext(EmployeeContext);
+    const {sortedMovies} = useContext(MovieContext);
 
     const [showAlert, setShowAlert] = useState(false);
 
@@ -18,7 +18,7 @@ const MovieList = () => {
     //const handleShowAlert = () =>setShowAlert(true);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [employeesPerPage] = useState(10)
+    const [MoviesPerPage] = useState(10)
 
     const handleShowAlert = () => {
         setShowAlert(true);
@@ -33,12 +33,12 @@ const MovieList = () => {
         return () => {
             handleShowAlert();
         }
-    }, [sortedEmployees])
+    }, [sortedMovies])
 
-    const indexOfLastEmployee = currentPage * employeesPerPage;
-    const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
-    const currentEmployees = sortedEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
-    const totalPagesNum = Math.ceil(sortedEmployees.length / employeesPerPage);
+    const indexOfLastMovie = currentPage * MoviesPerPage;
+    const indexOfFirstMovie = indexOfLastMovie - MoviesPerPage;
+    const currentMovies = sortedMovies.slice(indexOfFirstMovie, indexOfLastMovie);
+    const totalPagesNum = Math.ceil(sortedMovies.length / MoviesPerPage);
 
 
     return (
@@ -71,9 +71,9 @@ const MovieList = () => {
         <tbody>
 
                 {
-                  currentEmployees.map(employee => (
-                      <tr key={employee.id}>
-                        <Employee employee={employee} />
+                  currentMovies.map(Movie => (
+                      <tr key={Movie.id}>
+                        <Movie Movie={Movie} />
                     </tr>
                   ))  
                 }
@@ -83,9 +83,9 @@ const MovieList = () => {
     </table>
 
     <Pagination pages = {totalPagesNum}
-                setCurrentPage={setCurrentPage}
-                currentEmployees ={currentEmployees}
-                sortedEmployees = {sortedEmployees} />
+                setCurrentPage = {setCurrentPage}
+                currentMovies = {currentMovies}
+                sortedMovies = {sortedMovies} />
 
     <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

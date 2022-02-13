@@ -1,25 +1,23 @@
 import { Form, Button } from "react-bootstrap"
 
-import {EmployeeContext} from '../contexts/EmployeeContext';
+//import {MovieContext} from '../contexts/MovieContext';
 import {useContext, useState} from 'react';
 
-const EditForm = ({theEmployee}) =>{
+const EditForm = ({theMovie}) =>{
 
-    const id = theEmployee.id;
+    const id = theMovie.id;
 
-    const [name, setName] = useState(theEmployee.name);
-    const [email, setEmail] = useState(theEmployee.email);
-    const [address, setAddress] = useState(theEmployee.address);
-    const [phone, setPhone] = useState(theEmployee.phone);
+    const [name, setName] = useState(theMovie.name);
+    const [rank, setRank] = useState(theMovie.rank);
+    const [year, setYear] = useState(theMovie.year);
 
+    const {updateMovie} = useContext(MovieContext);
 
-    const {updateEmployee} = useContext(EmployeeContext);
-
-    const updatedEmployee = {id, name, email, address, phone}
+    const updatedMovie = {id, name, rank, year}
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        updateEmployee(id, updatedEmployee)
+        updateMovie(id, updatedMovie)
     }
 
      return (
@@ -38,34 +36,27 @@ const EditForm = ({theEmployee}) =>{
             <Form.Group>
                 <Form.Control
                     type="email"
-                    placeholder="Email *"
-                    name="email"
-                    value={email}
-                    onChange={(e)=> setEmail(e.target.value)}
+                    placeholder="Year *"
+                    name="year"
+                    classname="form-field"
+                    value={year}
+                    onChange={(e)=> setName(e.target.value)}
                     required
                 />
             </Form.Group>
             <Form.Group>
                 <Form.Control
                     as="textarea"
-                    placeholder="Address"
+                    placeholder="Rank"
                     rows={3}
-                    name="address"
-                    value={address}
-                    onChange={(e)=> setAddress(e.target.value)}
-                />
-            </Form.Group>
-            <Form.Group>
-                <Form.Control
-                    type="text"
-                    placeholder="Phone"
-                    name="phone"
-                    value={phone}
-                    onChange={(e)=> setPhone(e.target.value)}
+                    name="rank"
+                    classname="form-field"
+                    value={rank}
+                    onChange={(e)=> setName(e.target.value)}
                 />
             </Form.Group>
             <Button variant="success" type="submit" block>
-                Edit Employee
+                Edit Movie
             </Button>
         </Form>
 
