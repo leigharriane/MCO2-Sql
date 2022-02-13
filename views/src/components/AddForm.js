@@ -67,7 +67,7 @@ const AddForm = () =>{
                 />
             </Form.Group>
             <Button variant="success" type="submit" block>
-                Add New Employee
+                Add New Movie
             </Button>
         </Form>
 
