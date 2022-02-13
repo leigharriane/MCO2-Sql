@@ -19,6 +19,7 @@ const Movie = ({movie}) => {
 
     return (
         <>
+            <td>{movie.id}</td>
             <td>{movie.name}</td>
             <td>{movie.year}</td>
             <td>{movie.rank}</td>
