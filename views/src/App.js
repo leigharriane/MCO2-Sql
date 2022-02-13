@@ -1,7 +1,10 @@
+import React, {useState, useEffect} from "react";
 import MovieList from './components/MovieList';
 import EmployeeContextProvider from './contexts/EmployeeContext';
+import Axios from 'axios';
 
 function App() {
+
   return (
     <div className="container-xl">
       <div className="table-responsive">

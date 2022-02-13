@@ -16,7 +16,7 @@ app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.get("/readAll", (req, res) => {
-  const sqlRead = "SELECT * FROM mco2.movies LIMIT 10";
+  const sqlRead = "SELECT * FROM stadvdbmco2.movies LIMIT 10";
   db.query(sqlRead, (err, result) => {
     if (err) console.log("ERROR: "+err);
     res.send(result);
@@ -26,7 +26,7 @@ app.post("/createNew",(req,res)=>{
     const movieName = req.body.name;
     const movieYear = req.body.year;
     const movieRank = req.body.rank;
-    const sqlInsert = "INSERT INTO mco2.movies (name, year, rank) VALUES (?,?)"
+    const sqlInsert = "INSERT INTO stadvdbmco2.movies (name, year, rank) VALUES (?,?)"
     db.query(sqlInsert,[movieName,movieYear,movieRank],(err, result)=>{
         if (err) console.log("Error: "+err);
         console.log("Success")
