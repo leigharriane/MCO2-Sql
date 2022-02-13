@@ -18,7 +18,7 @@ const EmployeeList = () => {
     //const handleShowAlert = () =>setShowAlert(true);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [employeesPerPage] = useState(2)
+    const [employeesPerPage] = useState(10)
 
     const handleShowAlert = () => {
         setShowAlert(true);
@@ -49,7 +49,7 @@ const EmployeeList = () => {
                 <h2>Manage <b>Employees</b></h2>
             </div>
             <div className="col-sm-6">
-                <Button onClick={handleShow} className="btn btn-success" data-toggle="modal"><i className="material-icons">&#xE147;</i> <span>Add New Employee</span></Button>					
+                <Button onClick={handleShow} className="btn btn-success" data-toggle="modal"><i className="material-icons">&#xE147;</i> <span>Add New Movie</span></Button>					
             </div>
         </div>
     </div>
@@ -61,10 +61,10 @@ const EmployeeList = () => {
     <table className="table table-striped table-hover">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Phone</th>
+                <th>ID</th>
+                <th>Movie Name</th>
+                <th>Year</th>
+                <th>Rank</th>
                 <th>Actions</th>
             </tr>
         </thead>
