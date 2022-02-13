@@ -1,9 +1,10 @@
 import { Modal, Button, Alert} from 'react-bootstrap';
 import {useContext, useEffect, useState } from 'react';
 import {MovieContext} from '../contexts/MovieContext';
-import Movie from './Movie';
 import AddForm from './AddForm';
 import Pagination from './Pagination';
+import Movie from './Movie.js';
+
 
 const MovieList = () => {
 
@@ -69,9 +70,9 @@ const MovieList = () => {
         <tbody>
 
                 {
-                  currentMovies.map(Movie => (
+                  currentMovies.map(movie => (
                       <tr key={Movie.id}>
-                        <Movie Movie={Movie} />
+                        <Movie movie={movie} />
                     </tr>
                   ))  
                 }

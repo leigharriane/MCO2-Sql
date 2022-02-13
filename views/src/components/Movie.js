@@ -4,7 +4,7 @@ import { Modal, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import EditForm from './EditForm'
 
 
-const Movie = ({Movie}) => {
+const Movie = ({movie}) => {
 
     const {deleteMovie} = useContext(MovieContext)
 
@@ -19,9 +19,9 @@ const Movie = ({Movie}) => {
 
     return (
         <>
-            <td>{Movie.name}</td>
-            <td>{Movie.year}</td>
-            <td>{Movie.rank}</td>
+            <td>{movie.name}</td>
+            <td>{movie.year}</td>
+            <td>{movie.rank}</td>
             <td>
                 <OverlayTrigger
                     overlay={
@@ -37,7 +37,7 @@ const Movie = ({Movie}) => {
                             Delete
                         </Tooltip>
                     }>
-                    <button onClick={() => deleteMovie(Movie.id)}  className="btn text-danger btn-act" data-toggle="modal"><i className="material-icons">&#xE872;</i></button>
+                    <button onClick={() => deleteMovie(movie.id)}  className="btn text-danger btn-act" data-toggle="modal"><i className="material-icons">&#xE872;</i></button>
                 </OverlayTrigger>
                 
                 

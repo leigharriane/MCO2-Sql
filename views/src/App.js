@@ -1,5 +1,5 @@
 import MovieList from './components/MovieList';
-import EmployeeContextProvider from './contexts/EmployeeContext';
+import EmployeeContextProvider from './contexts/MovieContext';
 
 function App() {
   return (
