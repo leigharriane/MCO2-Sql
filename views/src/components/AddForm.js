@@ -1,13 +1,13 @@
 import { Form, Button } from "react-bootstrap"
 import {useContext, useState} from 'react';
-// import {MovieContext} from '../contexts/MovieContext';
+import {MovieContext} from '../contexts/MovieContext';
 
 const AddForm = () =>{
 
-    //const {addMovie} = useContext(MovieContext);
+    const {addMovie} = useContext(MovieContext);
 
     const [newMovie, setNewMovie] = useState({
-        name:"", email:"", phone:"", address:""
+        name:"", year:"", rank:""
     });
 
     const onInputChange = (e) => {
@@ -18,7 +18,7 @@ const AddForm = () =>{
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        //addMovie(name, year, rank);
+        addMovie(name, year, rank);
     }; return (
         <Form onSubmit={handleSubmit}>
             <Form.Group>
