@@ -15,7 +15,6 @@ const MovieList = () => {
     
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
-    //const handleShowAlert = () =>setShowAlert(true);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [employeesPerPage] = useState(10)
@@ -40,13 +39,12 @@ const MovieList = () => {
     const currentEmployees = sortedEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
     const totalPagesNum = Math.ceil(sortedEmployees.length / employeesPerPage);
 
-
     return (
     <>
     <div className="table-title">
         <div className="row">
             <div className="col-sm-6">
-                <h2><b> Movie List </b></h2>
+                <h2><b> Movies List </b></h2>
             </div>
             <div className="col-sm-6">
                 <Button onClick={handleShow} className="btn btn-success" data-toggle="modal"><i className="material-icons">&#xE147;</i> <span>Add New Movie</span></Button>					
