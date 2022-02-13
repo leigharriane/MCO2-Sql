@@ -46,7 +46,7 @@ const MovieList = () => {
     <div className="table-title">
         <div className="row">
             <div className="col-sm-6">
-                <h2>Manage <b>Movies</b></h2>
+                <h2><b> Movie List </b></h2>
             </div>
             <div className="col-sm-6">
                 <Button onClick={handleShow} className="btn btn-success" data-toggle="modal"><i className="material-icons">&#xE147;</i> <span>Add New Movie</span></Button>					
