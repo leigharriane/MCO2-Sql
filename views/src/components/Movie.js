@@ -53,7 +53,7 @@ const Movie = ({movie}) => {
             </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <EditForm theMovie={Movie} />
+            <EditForm theMovie={movie} />
         </Modal.Body>
         <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>

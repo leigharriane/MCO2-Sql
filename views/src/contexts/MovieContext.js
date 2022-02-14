@@ -49,7 +49,8 @@ const deleteMovie = (id) => {
 }
 
 const updateMovie = (id, updatedMovie) => {
-    setMovies(movies.map((movie) => movie.id === id ? updatedMovie : movie))
+    setMovies(movies.map((data) => data.id === id ? updatedMovie : data))
+
 }
 
     return (

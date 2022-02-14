@@ -2,13 +2,12 @@ import { Form, Button } from "react-bootstrap"
 
 import {MovieContext} from '../contexts/MovieContext';
 import {useContext, useState} from 'react';
+import Movie from './Movie.js';
+
 
 const EditForm = ({theMovie}) =>{
 
     const id = theMovie.id;
-
-    console.log("pakyu");
-    console.log(theMovie);
 
     const [name, setName] = useState(theMovie.name);
     const [rank, setRank] = useState(theMovie.rank);
@@ -17,10 +16,12 @@ const EditForm = ({theMovie}) =>{
     const {updateMovie} = useContext(MovieContext);
 
     const updatedMovie = {id, name, rank, year}
+   
 
     const handleSubmit = (e) => {
         e.preventDefault();
         updateMovie(id, updatedMovie)
+        
     }
 
      return (
@@ -34,6 +35,7 @@ const EditForm = ({theMovie}) =>{
                     value={name}
                     onChange={(e)=> setName(e.target.value)}
                     required
+                    
                 />
             </Form.Group>
             <Form.Group>
@@ -43,7 +45,7 @@ const EditForm = ({theMovie}) =>{
                     name="year"
                     classname="form-field"
                     value={year}
-                    onChange={(e)=> setName(e.target.value)}
+                    onChange={(e)=> setYear(e.target.value)}
                     required
                 />
             </Form.Group>
@@ -55,7 +57,7 @@ const EditForm = ({theMovie}) =>{
                     name="rank"
                     classname="form-field"
                     value={rank}
-                    onChange={(e)=> setName(e.target.value)}
+                    onChange={(e)=> setRank(e.target.value)}
                 />
             </Form.Group>
             <Button variant="success" type="submit" block>
