@@ -40,7 +40,7 @@ const EditForm = ({theMovie}) =>{
             </Form.Group>
             <Form.Group>
                 <Form.Control
-                    type="email"
+                    type="text"
                     placeholder="Year *"
                     name="year"
                     classname="form-field"
@@ -51,7 +51,6 @@ const EditForm = ({theMovie}) =>{
             </Form.Group>
             <Form.Group>
                 <Form.Control
-                    as="textarea"
                     placeholder="Rank"
                     rows={3}
                     name="rank"
