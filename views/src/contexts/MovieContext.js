@@ -1,10 +1,45 @@
 import {createContext, useEffect, useState} from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Axios from 'axios';
+const mysql = require("mysql2");
 
 export const MovieContext = createContext()
 
+var db;
+
+function connect() {
+    db = mysql.createPool({
+        host: 'transactionmanagement1.mysql.database.azure.com',
+        user: 'adminuser',
+        password: 'Password!23',
+        database: 'stadvdbmco2',
+        port: 3306,
+      });
+}
+
+function connect2() {
+    db = mysql.createPool({
+        host: 'transactionmanagement.mysql.database.azure.com',
+        user: 'adminuser',
+        password: 'Password!23',
+        database: 'stadvdbmco2',
+        port: 3306,
+      });
+}
+
+function connect3() {
+    db = mysql.createPool({
+        host: 'transactionmanagementlino.mysql.database.azure.com',
+        user: 'adminuser',
+        password: 'Password!23',
+        database: 'stadvdbmco2',
+        port: 3306,
+      });
+}
+
 const MovieContextProvider  = (props) => {
+
+    connect();
 
     const [data, setData] = useState ([])
     useEffect(()=>{

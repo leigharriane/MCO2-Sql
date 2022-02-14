@@ -5,13 +5,15 @@ const bodyParser = require("body-parser")
 require("dotenv").config();
 
 const app = express();
-const db = mysql.createPool({
-  host: 'transactionmanagement1.mysql.database.azure.com',
-  user: 'adminuser',
-  password: 'Password!23',
-  database: 'stadvdbmco2',
-  port: 3306,
-});
+
+// const db = mysql.createPool({
+//   host: 'transactionmanagement1.mysql.database.azure.com',
+//   user: 'adminuser',
+//   password: 'Password!23',
+//   database: 'stadvdbmco2',
+//   port: 3306,
+// });
+
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}))
@@ -22,6 +24,7 @@ app.get("/readAll", (req, res) => {
     res.send(result);
   });
 });
+
 app.post("/createNew",(req,res)=>{
     const movieName = req.body.name;
     const movieYear = req.body.year;
@@ -32,6 +35,7 @@ app.post("/createNew",(req,res)=>{
         console.log("Success")
     })
 })
+
 app.listen(3001, () => {
   console.log("Running on port 3001");
 });
