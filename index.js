@@ -6,6 +6,8 @@ require("dotenv").config();
 
 const app = express();
 
+var db;
+
 // const db = mysql.createPool({
 //   host: 'transactionmanagement1.mysql.database.azure.com',
 //   user: 'adminuser',
@@ -13,6 +15,38 @@ const app = express();
 //   database: 'stadvdbmco2',
 //   port: 3306,
 // });
+
+function connect() {
+  db = mysql.createPool({
+      host: 'transactionmanagement1.mysql.database.azure.com',
+      user: 'adminuser',
+      password: 'Password!23',
+      database: 'stadvdbmco2',
+      port: 3306,
+    });
+}
+
+function connect2() {
+  db = mysql.createPool({
+      host: 'transactionmanagement.mysql.database.azure.com',
+      user: 'adminuser',
+      password: 'Password!23',
+      database: 'stadvdbmco2',
+      port: 3306,
+    });
+}
+
+function connect3() {
+  db = mysql.createPool({
+      host: 'transactionmanagementlino.mysql.database.azure.com',
+      user: 'adminuser',
+      password: 'Password!23',
+      database: 'stadvdbmco2',
+      port: 3306,
+    });
+}
+
+connect();
 
 app.use(cors())
 app.use(express.json())
