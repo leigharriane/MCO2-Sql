@@ -46,7 +46,7 @@ function connect3() {
     });
 }
 
-connect();
+connect2();
 
 app.use(cors())
 app.use(express.json())
