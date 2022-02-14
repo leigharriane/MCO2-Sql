@@ -19,13 +19,7 @@ const MovieContextProvider  = (props) => {
       console.log(data);
     },[])
 
-    const [movies, setMovies] = useState([
-        {id:uuidv4(), name: 'Thomas Hardy10', year: 'thomashardy@mail.com', rank: '(171) 555-2222'},
-        {id:uuidv4(), name: 'Dominique Perrier', year: 'dominiqueperrier@mail.com', rank: '(313) 555-5735'},
-        {id:uuidv4(), name: 'Maria Anders', year: 'mariaanders@mail.com', rank: '(503) 555-9931'},
-        {id:uuidv4(), name: 'Fran Wilson', year: 'franwilson@mail.com', rank: '(204) 619-5731'},
-        {id:uuidv4(), name: 'Martin Blank', year: 'martinblank@mail.com', rank: '(480) 631-2097'}
-])
+    const [movies, setMovies] = useState([])
 
 useEffect(()=> {
     // console.log(movies);
@@ -35,11 +29,11 @@ useEffect(()=> {
     setMovies(data);
 },[data])
 
-useEffect(() => {
-    localStorage.setItem('movies', JSON.stringify(data));
-},[])
+// useEffect(() => {
+//     localStorage.setItem('movies', JSON.stringify(data));
+// },[])
 
-
+console.log(data);
 
 const sortedMovies = movies.sort((a,b)=>(a.name < b.name ? -1 : 1));
 
