@@ -6,7 +6,7 @@ require("dotenv").config();
 
 const app = express();
 const db = mysql.createPool({
-  host: 'transactionmanagement1.mysql.database.azure.com',
+  host: 'transactionmanagement.mysql.database.azure.com',
   user: 'adminuser',
   password: 'Password!23',
   database: 'stadvdbmco2',

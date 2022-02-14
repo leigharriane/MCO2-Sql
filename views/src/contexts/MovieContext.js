@@ -31,12 +31,13 @@ useEffect(()=> {
     // console.log(movies);
     // setMovies(JSON.parse(localStorage.getItem('movies')))
     // console.log(movies);
+
     setMovies(data);
-},[])
+},[data])
 
 useEffect(() => {
     localStorage.setItem('movies', JSON.stringify(data));
-})
+},[])
 
 
 
