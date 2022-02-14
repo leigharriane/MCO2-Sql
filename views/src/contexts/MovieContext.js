@@ -50,8 +50,8 @@ const MovieContextProvider  = (props) => {
       }).catch((err)=>{
         console.log(err);
       });
-      console.log("hatdog");
-      console.log(data);
+    //   console.log("hatdog");
+    //   console.log(data);
     },[])
 
     const [movies, setMovies] = useState([])
@@ -68,10 +68,9 @@ useEffect(()=> {
 //     localStorage.setItem('movies', JSON.stringify(data));
 // },[])
 
-console.log(data);
+
 
 const sortedMovies = movies.sort((a,b)=>(a.name < b.name ? -1 : 1));
-
 
 
 const addMovie = (name, rank, year) => {

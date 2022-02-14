@@ -7,6 +7,9 @@ const EditForm = ({theMovie}) =>{
 
     const id = theMovie.id;
 
+    console.log("pakyu");
+    console.log(theMovie);
+
     const [name, setName] = useState(theMovie.name);
     const [rank, setRank] = useState(theMovie.rank);
     const [year, setYear] = useState(theMovie.year);
