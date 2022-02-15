@@ -46,9 +46,7 @@ function connect3() {
   });
 }
 
-connect();
-
-
+connect(); //change to your node
 
 
 app.use(cors())
@@ -56,7 +54,7 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.get("/readAll", (req, res) => {
   const sqlRead = "SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT 10";
-  connect();
+  connect(); //change to your node
   db.query(sqlRead, (err, result) => {
     if (err) console.log("ERROR: " + err);
     res.send(result);
