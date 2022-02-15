@@ -51,12 +51,13 @@ const EditForm = ({theMovie}) =>{
             </Form.Group>
             <Form.Group>
                 <Form.Control
-                    placeholder="Rank"
-                    rows={3}
+                    type="text"
+                    placeholder="Rank *"
                     name="rank"
                     classname="form-field"
                     value={rank}
                     onChange={(e)=> setRank(e.target.value)}
+                    required
                 />
             </Form.Group>
             <Button variant="success" type="submit" block>
