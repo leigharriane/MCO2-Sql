@@ -239,8 +239,8 @@ app.post("/add/:name/:year/:rank", (req, res) => {
   const movieYear = parseInt(req.params.year);
   const movieRank = parseInt(req.params.rank);
   const sqlMaxId = "SELECT MAX(id) as maxId FROM stadvdbmco2.movies"
-  // const body = { id: id, name: movieName, year: movieYear, rank: movieRank }
-  // console.log(body);
+  const body = { id: id, name: movieName, year: movieYear, rank: movieRank }
+  console.log(body);
   const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
 
   console.log(movieName);

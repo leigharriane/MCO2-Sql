@@ -38,12 +38,13 @@ const sortedMovies = movies;
 // }
 
 const addMovie = (name, year, rank) => {
-    alert(`Movie id: ${id} Created`);
-    window.location = '/' // i.e. window.location='default.aspx'
+    //window.location = '/' // i.e. window.location='default.aspx'
     console.log(name);
     console.log(year);
     console.log(rank);
     Axios.post(`http://localhost:3001/add/${name}/${year}/${rank}`);
+    alert(`Movie name: ${name} Created`);
+    window.location = '/' // i.e. window.location='default.aspx'
  }
 
 /*const deleteMovie = (id) => {
