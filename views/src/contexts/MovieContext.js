@@ -10,7 +10,7 @@ const MovieContextProvider  = (props) => {
 
     const [data, setData] = useState ([])
     useEffect(()=>{
-      Axios.get("http://localhost:3001/readAll").then((response) =>{
+        Axios.get("http://localhost:3001/readAll").then((response) =>{
         console.log("ANSWER")
         setData(response.data);
         console.log(response.data)
@@ -43,6 +43,8 @@ const sortedMovies = movies;
 // }
 
 const addMovie = (name, year, rank) => {
+    alert(`Movie id: ${id} Created`);
+    window.location = '/' // i.e. window.location='default.aspx'
     console.log(name);
     console.log(year);
     console.log(rank);
@@ -55,6 +57,9 @@ const addMovie = (name, year, rank) => {
 
 
 const deleteMovie = (id, year) => {
+    alert(`Movie id: ${id} Deleted`);
+    window.location = '/' // i.e. window.location='default.aspx'
+
     console.log(id);
     console.log(year);
     console.log("hi");
@@ -62,6 +67,7 @@ const deleteMovie = (id, year) => {
     //console.log(data.id);//undefined
     //setMovies(movies.filter(movie => movie.id !== id))
     Axios.delete(`http://localhost:3001/delete/${id}/${year}`);
+    //window.location.reload();
     //setMovies(data);//not sure ano ginagawa neto
 };
 
