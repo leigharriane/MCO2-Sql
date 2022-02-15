@@ -2,35 +2,18 @@
 
 body {
 	color: #566787;
-	background: #272727;
-	background-color: #272727;
+	background: #111129;
+	background-color: #090916;
 	font-family: 'Poppins', sans-serif;
 	font-size: 13px;
 }
 
-.btn-success {
-	background-color:#7741f5;
-	border-color:rgb(70, 69, 69);
-}
-.btn-success:hover {
-	background-color:#713af1;
-	border-color:rgb(70, 69, 69);
-}
-.btn-success:focus {
-	color: #7741f5;
-	border-color:rgb(70, 69, 69);
-}
-.btn-success:active { 
-	color: #7741f5;
-	border-color:rgb(70, 69, 69);
-}
-.btn-success:default { 
-	color: #7741f5;
-	border-color:rgb(70, 69, 69);
+.btn-success, .btn-success:visited, .btn-success:hover, .btn-success:active, .btn-success:focus {
+	background-color:#4e1ec0 !important;
+	border-color:rgb(70, 69, 69) !important;
+	border-radius: 10px !important;
 }
 
-element.style {
-}
 .btn:not(:disabled):not(.disabled) {
     cursor: pointer;
 }
@@ -45,22 +28,16 @@ element.style {
     outline: none !important;
     margin-left: 8px;
 }
-.btn-success:focus {
-    color: #7741f5;
-    border-color: rgb(70, 69, 69);
-}
-.btn-success.focus, .btn-success:focus {
-	color: #7741f5;
-    border-color: rgb(70, 69, 69);
-}
+
 .btn-act {
 	padding: 4px;
+	color: #5b61bb !important;
 }
 .table-responsive {
     margin: 30px 0;
 }
 .table-wrapper {
-	background: #272727;
+	background: #090916;
 	padding: 20px 25px;
 	border-radius: 3px;
 	min-width: 1000px;
@@ -69,7 +46,7 @@ element.style {
 .table-title {        
 	padding-bottom: 15px;
 	/* background: #d4973c; */
-	color: #f0f0f0;
+	color: #eeeeee;
 	padding: 16px 30px;
 	min-width: 100%;
 	margin: -20px -25px 10px;
@@ -77,13 +54,13 @@ element.style {
 }
 .table-title h2 {
 	margin: 5px 0 0;
-	font-size: 24px;
+	font-size: 20px;
 }
 .table-title .btn-group {
 	float: right;
 }
 .table-title .btn {
-	color: #f0f0f0;
+	color: #eeeeee;
 	float: right;
 	font-size: 14px;
 	border: none;
@@ -102,8 +79,15 @@ element.style {
 	float: left;
 	margin-top: 2px;
 }
+
+table th {
+	color: #828285;
+}
+table td {
+	color: #cfcccc;
+}
 table.table tr th, table.table tr td {
-	border-color: #4e4e4e;
+	border-color: #090916;
 	padding: 12px 15px;
 	vertical-align: middle;
 }
@@ -112,10 +96,11 @@ table.table tr th:last-child {
 	width: 150px;
 }
 table.table-striped tbody tr:nth-of-type(odd) {
-	background-color: #474747;
+	background-color: #0d0d2e;
+	border-radius: 15px;
 }
 table.table-striped.table-hover tbody tr:hover {
-	background: #f5f5f5;
+	background: #181852;
 }
 table.table th i {
 	font-size: 13px;
@@ -127,9 +112,11 @@ table.table td:last-child i {
 	font-size: 22px;
 	margin: 0 5px;
 }
+
+
 table.table td a {
 	font-weight: bold;
-	color: #566787;
+	color: #282044;
 	display: inline-block;
 	text-decoration: none;
 	outline: none !important;
@@ -171,10 +158,10 @@ table.table .avatar {
 	color: rgb(238, 237, 237);
 }	
 .pagination li.active a, .pagination li.active a.page-link {
-	background: #9269f3;
+	background: #4a1eaf;
 }
 .pagination li.active a:hover {        
-	background: #9a77ec;
+	background: #5422c7;
 }
 .pagination li.disabled i {
 	color: rgb(70, 69, 69);
@@ -187,7 +174,7 @@ table.table .avatar {
 	float: left;
 	margin-top: 10px;
 	font-size: 13px;
-	color:#9269f3;
+	color:#5229b3;
 }   
 
 /* Modal styles */
@@ -207,15 +194,14 @@ table.table .avatar {
 }
 .modal .modal-footer {
 	background: #474747;
-	border-radius: 0 0 3px 3px;
 }
 .modal .modal-title {
 	display: inline-block;
 }
 .modal .form-control {
-	border-radius: 2px;
+	border-radius: 8px;
 	box-shadow: none;
-	border-color: #474747;
+	border-color: #090916;
 }
 .modal textarea.form-control {
 	resize: vertical;
