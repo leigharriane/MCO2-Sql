@@ -34,10 +34,8 @@ useEffect(()=> {
 // useEffect(() => {
 //     localStorage.setItem('movies', JSON.stringify(data));
 // },[])
-
-
 console.log(movies);
-const sortedMovies = movies.sort((a,b)=>(a.name < b.name ? -1 : 1));
+const sortedMovies = movies.sort((a,b)=>(a.name > b.name ? -1 : 1));
 
 
 // const addMovie = (name, rank, year) => {
