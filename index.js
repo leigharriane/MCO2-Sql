@@ -52,13 +52,16 @@ app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.get("/readAll", (req, res) => {
-  const sqlRead = "SELECT * FROM stadvdbmco2.movies LIMIT 10";
+  const sqlRead = "SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT 10";
+  
   db.query(sqlRead, (err, result) => {
     if (err) console.log("ERROR: "+err);
     res.send(result);
+    //console.log(result);
   });
 });
 
+/*
 app.post("/createNew",(req,res)=>{
     const movieName = req.body.name;
     const movieYear = req.body.year;
@@ -68,7 +71,7 @@ app.post("/createNew",(req,res)=>{
         if (err) console.log("Error: "+err);
         console.log("Success")
     })
-})
+})*/
 
 app.get("/kyle", (req,res) => {
   res.send("hellokyle")
@@ -81,24 +84,24 @@ app.delete("/delete/:id/:year",(req,res)=>{
   const movieYear = req.params.year
   const sqlDelete = "DELETE FROM stadvdbmco2.movies WHERE id = ?"
 
-  //connect3()
+  connect()
   db.query(sqlDelete, movieId,(err, result)=>{
     if (err) console.log("Error: "+err);
-    console.log("Success")
+    console.log("Success-dlete node 1")
 })
 
-/*
+
   if(movieYear < 1980){
     connect2()
     db.query(sqlDelete, movieId,(err, result)=>{
       if (err) console.log("Error: "+err);
-      console.log("Success")
+      console.log("Success-delete node 2")
   })
   }else{
     connect3()
     db.query(sqlDelete, movieId,(err, result)=>{
       if (err) console.log("Error: "+err);
-      console.log("Success")
+      console.log("Success-delete node 3")
   })
   }
 
@@ -114,9 +117,9 @@ app.get("/update/:id/:name/:year/:rank",(req,res)=>{
 
   const movieName = req.params.name;
   console.log(movieName);
-  const movieYear = req.params.year;
-  const movieRank = req.params.rank;
-  const movieId = req.params.id
+  const movieYear = parseInt(req.params.year);
+  const movieRank = parseInt(req.params.rank);
+  const movieId = req.params.id;
 
   //const sqlUpdate = "UPDATE SET stadvdbmco2.movies name = ?, year = ?, rank = ? WHERE id = ?"
   const sqlUpdate = "UPDATE stadvdbmco2.movies SET ? WHERE id=?"
@@ -126,6 +129,93 @@ app.get("/update/:id/:name/:year/:rank",(req,res)=>{
       console.log("Success")
   })
 })
+
+app.post("/add/:name/:year/:rank",(req,res)=>{
+  const movieName = req.params.name;
+  const movieYear = parseInt(req.params.year);
+  const movieRank = parseInt(req.params.rank);
+  const id = 444445;
+  console.log(movieName);
+  console.log(movieYear);
+  console.log(movieRank);
+  //const sqlInsert = "INSERT INTO stadvdbmco2.movies (id, name, year, rank) VALUES (?,?,?,?)"
+  const body = {id:id,name:movieName,year:movieYear,rank:movieRank}
+  console.log(body);
+  const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
+
+  connect()
+  db.query(sqlInsert,body,(err, result)=>{
+      if (err) console.log("Error: "+err);
+      console.log("Success - added node 1")
+  })
+
+  if(movieYear < 1980){
+    connect2()
+    db.query(sqlInsert,body,(err, result)=>{
+      if (err) console.log("Error: "+err);
+      console.log("Success - added node 2")
+  })
+  }else{
+    connect3()
+    db.query(sqlInsert,body,(err, result)=>{
+      if (err) console.log("Error: "+err);
+      console.log("Success -  added node 3")
+  })
+  }
+
+//   db.query(sqlInsert,[id, movieName,movieYear,movieRank],(err, result)=>{
+//     if (err) console.log("Error: "+err);
+//     console.log("Success")
+// })
+})
+
+
+//ADD
+/*
+addMovie: function (req, res) {
+        var max_row = 0;
+        var name = req.query.name; 
+        var year = req.query.year;
+        var genre = req.query.genre;
+        var director = req.query.director;
+        var actor1 = req.query.actor1;
+        var actor2 = req.query.actor2;
+        connect_node1();
+        db.query("SELECT MAX(id) AS max_row FROM imdb_ijs.movies", function(err, results) {
+            if(err) throw err;
+            res.send(results);
+            
+            max_row = results[0].max_row + 1
+            console.log(max_row);
+            
+
+            console.log("ADD NAME: " + name); 
+            console.log("ADD YEAR: " + year);
+
+            connect_node1();
+            db.query('INSERT INTO imdb_ijs.movies SET id = ?, name = ?, year = ?,' + 
+            ' genre = ?, director = ?, actor1 = ?, actor2 = ?', 
+            [max_row, name, year, genre, director, actor1, actor2], (error, rows) => {
+                if (error)  console.log(error);
+            
+            });
+
+            if(year < 1980){
+                connect_node2();
+            }
+            else if(year >= 1980){
+                connect_node3();
+            }
+            db.query('INSERT INTO imdb_ijs.movies SET id = ?, name = ?, year = ?,' + 
+                ' genre = ?, director = ?, actor1 = ?, actor2 = ?', 
+                [max_row, name, year, genre, director, actor1, actor2], (error, rows) => {
+                    if(error) {
+                        console.log();
+                    }
+                });
+            db.end();
+        });
+    }, */
 
 
 

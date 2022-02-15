@@ -36,13 +36,20 @@ useEffect(()=> {
 // },[])
 
 
-
+console.log(movies);
 const sortedMovies = movies.sort((a,b)=>(a.name < b.name ? -1 : 1));
 
 
-const addMovie = (name, rank, year) => {
-    setMovies([...movies , {id:uuidv4(), name, year, rank}])
-}
+// const addMovie = (name, rank, year) => {
+//     setMovies([...movies , {id:uuidv4(), name, year, rank}])
+// }
+
+const addMovie = (name, year, rank) => {
+    console.log(name);
+    console.log(year);
+    console.log(rank);
+    Axios.post(`http://localhost:3001/add/${name}/${year}/${rank}`);
+ }
 
 /*const deleteMovie = (id) => {
     setMovies(movies.filter(movie => movie.id !== id))
