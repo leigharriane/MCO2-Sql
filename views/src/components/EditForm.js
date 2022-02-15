@@ -20,7 +20,7 @@ const EditForm = ({theMovie}) =>{
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        updateMovie(id, updatedMovie)
+        updateMovie(updatedMovie)
         
     }
 

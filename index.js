@@ -110,13 +110,18 @@ app.delete("/delete/:id/:year",(req,res)=>{
 
 
 //UPDATE
-app.put("/update/:id/:updateMovie.name/:updateMovie.year/:updateMovie.rank",(req,res)=>{
-  const movieName = req.params.updateMovie.name;
-  const movieYear = req.params.updateMovie.year;
-  const movieRank = req.params.updateMovie.rank;
+app.get("/update/:id/:name/:year/:rank",(req,res)=>{
+
+  const movieName = req.params.name;
+  console.log(movieName);
+  const movieYear = req.params.year;
+  const movieRank = req.params.rank;
   const movieId = req.params.id
-  const sqlUpdate = "UPDATE SET stadvdbmco2.movies name = ?, year = ?, rank = ? WHERE id = ?"
-  db.query(sqlUpdate,[movieName,movieYear,movieRank,movieId],(err, result)=>{
+
+  //const sqlUpdate = "UPDATE SET stadvdbmco2.movies name = ?, year = ?, rank = ? WHERE id = ?"
+  const sqlUpdate = "UPDATE stadvdbmco2.movies SET ? WHERE id=?"
+  const body = {name:movieName,year:movieYear,rank:movieRank}
+  db.query(sqlUpdate,[body,movieId],(err, result)=>{
       if (err) console.log("Error: "+err);
       console.log("Success")
   })

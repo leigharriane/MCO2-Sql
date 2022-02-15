@@ -58,7 +58,7 @@ const deleteMovie = (id, year) => {
     setMovies(data);//not sure ano ginagawa neto
 };
 
-
+/*
 const updateMovie = (id, updatedMovie) => {
     console.log(id);
     console.log(updatedMovie)
@@ -67,9 +67,25 @@ const updateMovie = (id, updatedMovie) => {
     console.log(updatedMovie.rank)
     //setMovies(movies.map((data) => data.id === id ? updatedMovie : data))
     Axios.put(`http://localhost:3001/update/${id}/${updatedMovie.name}/${updatedMovie.year}/${updatedMovie.rank}`);
+    //app.put("/update/:id/:updateMovie.name/:updateMovie.year/:updateMovie.rank",(req,res)=>{
     setMovies(data);//not sure ano ginagawa neto
 
+}*/
+
+const updateMovie = (updatedMovie) => {
+    //console.log(id);
+    //const name = req.body.name
+    console.log(updatedMovie.id)
+    console.log(updatedMovie.name)
+    console.log(updatedMovie.year)
+    console.log(updatedMovie.rank)
+    //setMovies(movies.map((data) => data.id === id ? updatedMovie : data))
+    Axios.get(`http://localhost:3001/update/${updatedMovie.id}/${updatedMovie.name}/${updatedMovie.year}/${updatedMovie.rank}`);
+    //app.put("/update/:id/:updateMovie.name/:updateMovie.year/:updateMovie.rank",(req,res)=>{
+    //setMovies(data);//not sure ano ginagawa neto
+
 }
+
 
     return (
         <MovieContext.Provider value={{sortedMovies, addMovie, deleteMovie, updateMovie}}>
