@@ -38,7 +38,7 @@ const sortedMovies = movies;
 // }
 
 const addMovie = (name, year, rank) => {
-    alert(`Movie id: ${id} Created`);
+    alert(`Movie name: ${name} Created`);
     window.location = '/' // i.e. window.location='default.aspx'
     console.log(name);
     console.log(year);
