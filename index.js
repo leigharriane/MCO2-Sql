@@ -115,7 +115,7 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
   const movieYear = parseInt(req.params.year);
   const movieRank = parseInt(req.params.rank);
   const movieId = req.params.id;
-  var addnode = 0;
+  var addednode = 0;
   var deletenode = 0;
 
   const sqlDelete = "DELETE FROM stadvdbmco2.movies WHERE id = ?"
@@ -155,11 +155,6 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
     if (err) console.log("Error: " + err);
     console.log("Success - added node " + addednode);
   })
-
-    
- 
-
-  
 })
 
 
@@ -208,9 +203,6 @@ app.post("/add/:name/:year/:rank", (req, res) => {
     }
   })
 })
-
-
-
 
 app.listen(3001, () => {
   console.log("Running on port 3001");
