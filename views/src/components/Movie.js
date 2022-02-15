@@ -7,7 +7,12 @@ import Axios from 'axios';
 
 const Movie = ({movie}) => {
 
-    const {deleteMovie} = useContext(MovieContext)
+   const {deleteMovie} = useContext(MovieContext)
+
+    //const deleteMovie = (MovieContext) => {
+    //Axios.delete(`http://localhost:3001/delete/${MovieContext}`);
+    //};
+
 
     const [show, setShow] = useState(false);
     
@@ -40,7 +45,7 @@ const Movie = ({movie}) => {
                             Delete
                         </Tooltip>
                     }>
-                    <button onClick={() => deleteMovie(movie.id)}  className="btn text-danger btn-act" data-toggle="modal"><i className="material-icons">&#xE872;</i></button>
+                    <button onClick={() => deleteMovie(movie.id,movie.year)}  className="btn text-danger btn-act" data-toggle="modal"><i className="material-icons">&#xE872;</i></button>
                 </OverlayTrigger>
                 
                 

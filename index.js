@@ -46,7 +46,7 @@ function connect3() {
     });
 }
 
-connect2();
+connect3();
 
 app.use(cors())
 app.use(express.json())
@@ -69,6 +69,60 @@ app.post("/createNew",(req,res)=>{
         console.log("Success")
     })
 })
+
+app.get("/kyle", (req,res) => {
+  res.send("hellokyle")
+})
+
+
+//DELETE
+app.delete("/delete/:id/:year",(req,res)=>{
+  const movieId = req.params.id
+  const movieYear = req.params.year
+  const sqlDelete = "DELETE FROM stadvdbmco2.movies WHERE id = ?"
+
+  //connect3()
+  db.query(sqlDelete, movieId,(err, result)=>{
+    if (err) console.log("Error: "+err);
+    console.log("Success")
+})
+
+/*
+  if(movieYear < 1980){
+    connect2()
+    db.query(sqlDelete, movieId,(err, result)=>{
+      if (err) console.log("Error: "+err);
+      console.log("Success")
+  })
+  }else{
+    connect3()
+    db.query(sqlDelete, movieId,(err, result)=>{
+      if (err) console.log("Error: "+err);
+      console.log("Success")
+  })
+  }
+
+  /*db.query(sqlDelete, movieId,(err, result)=>{
+      if (err) console.log("Error: "+err);
+      console.log("Success")
+  })*/
+})
+
+
+//UPDATE
+app.put("/update/:id/:updateMovie.name/:updateMovie.year/:updateMovie.rank",(req,res)=>{
+  const movieName = req.params.updateMovie.name;
+  const movieYear = req.params.updateMovie.year;
+  const movieRank = req.params.updateMovie.rank;
+  const movieId = req.params.id
+  const sqlUpdate = "UPDATE SET stadvdbmco2.movies name = ?, year = ?, rank = ? WHERE id = ?"
+  db.query(sqlUpdate,[movieName,movieYear,movieRank,movieId],(err, result)=>{
+      if (err) console.log("Error: "+err);
+      console.log("Success")
+  })
+})
+
+
 
 app.listen(3001, () => {
   console.log("Running on port 3001");
