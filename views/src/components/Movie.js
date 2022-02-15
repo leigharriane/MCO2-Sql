@@ -2,7 +2,6 @@ import {useContext, useState, useEffect} from 'react';
 import {MovieContext} from '../contexts/MovieContext';
 import { Modal, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import EditForm from './EditForm'
-import Axios from 'axios';
 
 
 const Movie = ({movie}) => {

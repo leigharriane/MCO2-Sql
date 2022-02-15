@@ -1,6 +1,5 @@
 import {createContext, useEffect, useState} from 'react';
 import Axios from 'axios';
-const mysql = require("mysql2");
 
 export const MovieContext = createContext()
 

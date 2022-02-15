@@ -2,7 +2,6 @@ import { Form, Button } from "react-bootstrap"
 
 import {MovieContext} from '../contexts/MovieContext';
 import {useContext, useState} from 'react';
-import Movie from './Movie.js';
 
 
 const EditForm = ({theMovie}) =>{
