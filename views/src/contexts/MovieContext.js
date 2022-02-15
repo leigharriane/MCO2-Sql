@@ -1,5 +1,4 @@
 import {createContext, useEffect, useState} from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import Axios from 'axios';
 const mysql = require("mysql2");
 
@@ -24,10 +23,6 @@ const MovieContextProvider  = (props) => {
     const [movies, setMovies] = useState([])
 
 useEffect(()=> {
-    // console.log(movies);
-    // setMovies(JSON.parse(localStorage.getItem('movies')))
-    // console.log(movies);
-
     setMovies(data);
 },[data])
 
@@ -105,6 +100,7 @@ const updateMovie = (updatedMovie) => {
         <MovieContext.Provider value={{sortedMovies, addMovie, deleteMovie, updateMovie}}>
             {props.children}
         </MovieContext.Provider>
+        
     )
 }
 

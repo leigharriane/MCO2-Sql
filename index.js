@@ -48,7 +48,6 @@ function connect3() {
 
 connect(); //change to your node
 
-
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -85,13 +84,11 @@ app.delete("/delete/:id/:year", (req, res) => {
   const movieYear = req.params.year
   const sqlDelete = "DELETE FROM stadvdbmco2.movies WHERE id = ?"
 
-
   connect()
   db.query(sqlDelete, movieId, (err, result) => {
     if (err) console.log("Error: " + err);
     console.log("Success-dlete node 1")
   })
-
 
   if (movieYear < 1980) {
     connect2()
@@ -107,10 +104,6 @@ app.delete("/delete/:id/:year", (req, res) => {
     })
   }
 
-  /*db.query(sqlDelete, movieId,(err, result)=>{
-      if (err) console.log("Error: "+err);
-      console.log("Success")
-  })*/
 })
 
 
@@ -130,18 +123,20 @@ app.get("/update/:id/:name/:year/:rank", (req, res) => {
     if (err) console.log("Error: " + err);
     console.log("Success")
   })
+
+  
 })
 
+
+//ADD MOVIE
 app.post("/add/:name/:year/:rank", (req, res) => {
   const movieName = req.params.name;
   const movieYear = parseInt(req.params.year);
   const movieRank = parseInt(req.params.rank);
-  const id = 99999993;
   const sqlMaxId = "SELECT MAX(id) as maxId FROM stadvdbmco2.movies"
   const body = { id: id, name: movieName, year: movieYear, rank: movieRank }
   console.log(body);
   const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
-
 
   console.log(movieName);
   console.log(movieYear);
@@ -156,7 +151,6 @@ app.post("/add/:name/:year/:rank", (req, res) => {
       console.log("result", result[0].maxId);
       console.log("newId", newId);
       let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
-      
       
       connect()
       db.query(sqlInsert, newbody, (err, result) => {
@@ -178,88 +172,10 @@ app.post("/add/:name/:year/:rank", (req, res) => {
         })
       }
 
-
-
-
-
-
     }
   })
-  //const sqlInsert = "INSERT INTO stadvdbmco2.movies (id, name, year, rank) VALUES (?,?,?,?)"
-
-  // connect()
-  // db.query(sqlInsert,body,(err, result)=>{
-  //     if (err) console.log("Error: "+err);
-  //     console.log("Success - added node 1")
-  // })
-
-  // if(movieYear < 1980){
-  //   connect2()
-  //   db.query(sqlInsert,body,(err, result)=>{
-  //     if (err) console.log("Error: "+err);
-  //     console.log("Success - added node 2")
-  // })
-  // }else{
-  //   connect3()
-  //   db.query(sqlInsert,body,(err, result)=>{
-  //     if (err) console.log("Error: "+err);
-  //     console.log("Success -  added node 3")
-  // })
-  // }
-
-  //   db.query(sqlInsert,[id, movieName,movieYear,movieRank],(err, result)=>{
-  //     if (err) console.log("Error: "+err);
-  //     console.log("Success")
-  // })
 })
 
-
-//ADD
-/*
-addMovie: function (req, res) {
-        var max_row = 0;
-        var name = req.query.name; 
-        var year = req.query.year;
-        var genre = req.query.genre;
-        var director = req.query.director;
-        var actor1 = req.query.actor1;
-        var actor2 = req.query.actor2;
-        connect_node1();
-        db.query("SELECT MAX(id) AS max_row FROM imdb_ijs.movies", function(err, results) {
-            if(err) throw err;
-            res.send(results);
-            
-            max_row = results[0].max_row + 1
-            console.log(max_row);
-            
-
-            console.log("ADD NAME: " + name); 
-            console.log("ADD YEAR: " + year);
-
-            connect_node1();
-            db.query('INSERT INTO imdb_ijs.movies SET id = ?, name = ?, year = ?,' + 
-            ' genre = ?, director = ?, actor1 = ?, actor2 = ?', 
-            [max_row, name, year, genre, director, actor1, actor2], (error, rows) => {
-                if (error)  console.log(error);
-            
-            });
-
-            if(year < 1980){
-                connect_node2();
-            }
-            else if(year >= 1980){
-                connect_node3();
-            }
-            db.query('INSERT INTO imdb_ijs.movies SET id = ?, name = ?, year = ?,' + 
-                ' genre = ?, director = ?, actor1 = ?, actor2 = ?', 
-                [max_row, name, year, genre, director, actor1, actor2], (error, rows) => {
-                    if(error) {
-                        console.log();
-                    }
-                });
-            db.end();
-        });
-    }, */
 
 
 
