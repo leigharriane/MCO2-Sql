@@ -57,7 +57,6 @@ const deleteMovie = (id, year) => {
 
     console.log(id);
     console.log(year);
-    console.log("hi");
     console.log(data);
     //console.log(data.id);//undefined
     //setMovies(movies.filter(movie => movie.id !== id))
