@@ -8,6 +8,7 @@ import Movie from './Movie.js';
 const EditForm = ({theMovie}) =>{
 
     const id = theMovie.id;
+    const prevYear = theMovie.year;
 
     const [name, setName] = useState(theMovie.name);
     const [rank, setRank] = useState(theMovie.rank);
@@ -15,7 +16,7 @@ const EditForm = ({theMovie}) =>{
 
     const {updateMovie} = useContext(MovieContext);
 
-    const updatedMovie = {id, name, rank, year}
+    const updatedMovie = {id, name, rank, year, prevYear}
    
 
     const handleSubmit = (e) => {

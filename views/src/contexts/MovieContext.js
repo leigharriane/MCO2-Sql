@@ -38,7 +38,7 @@ const sortedMovies = movies;
 // }
 
 const addMovie = (name, year, rank) => {
-    //window.location = '/' // i.e. window.location='default.aspx'
+    window.location = '/' // i.e. window.location='default.aspx'
     console.log(name);
     console.log(year);
     console.log(rank);
@@ -88,8 +88,9 @@ const updateMovie = (updatedMovie) => {
     console.log(updatedMovie.name)
     console.log(updatedMovie.year)
     console.log(updatedMovie.rank)
+    console.log(updatedMovie.prevYear)
     //setMovies(movies.map((data) => data.id === id ? updatedMovie : data))
-    Axios.get(`http://localhost:3001/update/${updatedMovie.id}/${updatedMovie.name}/${updatedMovie.year}/${updatedMovie.rank}`);
+    Axios.get(`http://localhost:3001/update/${updatedMovie.id}/${updatedMovie.name}/${updatedMovie.year}/${updatedMovie.rank}/${updatedMovie.prevYear}`);
     //app.put("/update/:id/:updateMovie.name/:updateMovie.year/:updateMovie.rank",(req,res)=>{
     //setMovies(data);//not sure ano ginagawa neto
 

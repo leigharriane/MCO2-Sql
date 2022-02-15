@@ -108,126 +108,56 @@ app.delete("/delete/:id/:year", (req, res) => {
 
 
 //UPDATE
-app.get("/update/:id/:name/:year/:rank", (req, res) => {
-  const prevYear = req.body.year;
+app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
+  const prevYear = parseInt(req.params.prevYear);
   const movieName = req.params.name;
   console.log(movieName);
   const movieYear = parseInt(req.params.year);
   const movieRank = parseInt(req.params.rank);
   const movieId = req.params.id;
+  var addnode = 0;
+  var deletenode = 0;
 
-  console.log(prevYear);
-  console.log(movieYear);
+  const sqlDelete = "DELETE FROM stadvdbmco2.movies WHERE id = ?"
+  const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
+  const newbody = { id: movieId, name: movieName, year: movieYear, rank: movieRank }
 
   connect();
   const sqlUpdate = "UPDATE stadvdbmco2.movies SET ? WHERE id=?"
   const body = { name: movieName, year: movieYear, rank: movieRank }
   db.query(sqlUpdate, [body, movieId], (err, result) => {
     if (err) console.log("Error: " + err);
-    console.log("Success")
+    console.log("Success Updated Central Node!")
+  })
+
+  if (prevYear < 1980) {
+    connect2();
+    deletenode = 2;
+  } else if (prevYear >= 1980) {
+    connect3();
+    deletenode = 3;
+  }
+
+  db.query(sqlDelete, movieId, (err, result) => {
+    if (err) console.log("Error: " + err);
+    console.log("Success - deleted node " + deletenode);
   })
 
   if (movieYear < 1980) {
     connect2();
-    db.query(sqlDelete, movieId, (err, result) => {
-      if (err) console.log("Error: " + err);
-      console.log("Success-delete node 2")
-    })
-
+    addednode = 2;
+  } else if (movieYear >= 1980) {
+    connect3();
+    addednode = 3;
   }
 
+  db.query(sqlInsert, newbody, (err, result) => {
+    if (err) console.log("Error: " + err);
+    console.log("Success - added node " + addednode);
+  })
 
-  // updateMovie:  function (req, res) {
-  //   connect_node1();
-  //   var name = req.query.name;
-  //   var year = req.query.year;
-  //   var genre = req.query.genre;
-  //   var director = req.query.director;
-  //   var actor1 = req.query.actor1;
-  //   var actor2 = req.query.actor2;
-
-  //   console.log("update: " + editid);
-
-  //   console.log(
-  //     "helloz: " +
-  //       name +
-  //       " " +
-  //       year +
-  //       " " +
-  //       director +
-  //       " " +
-  //       actor1 +
-  //       " " +
-  //       actor2
-  //   );
     
-  //   db.beginTransaction(function(err){
-  //     if (err) console.log(err)
-  //     else{
-  //       if (oldyear < 1980) {
-  //         connect_node2();
-  //       } else if (oldyear >= 1980) {
-  //         connect_node3();
-  //       }
-    
-  //       db.query(
-  //         "DELETE FROM imdb_ijs.movies WHERE id = ?",
-  //         [editid],
-  //         (err, movies) => {
-  //           if (err) {
-  //             return db.rollback(function() {
-  //               throw err;
-  //             })
-  //           }
-  //         }
-  //       );
-    
-  //       if (year < 1980) {
-  //         connect_node2();
-  //       } else if (year >= 1980) {
-  //         connect_node3();
-  //       }
-        
-  //       // bale delete muna tas create nalang siya
-  //       db.query(
-  //         "INSERT INTO imdb_ijs.movies SET id = ?, name = ?, year = ?," +
-  //           " genre = ?, director = ?, actor1 = ?, actor2 = ?",
-  //         [editid, name, year, genre, director, actor1, actor2],
-  //         (error, rows) => {
-  //           if (error) {
-  //             return db.rollback(function() {
-  //               throw error;
-  //           });
-  //         }
-  //       });
-
-  //       connect_node1(); 
-        
-  //       db.query(
-  //         "UPDATE imdb_ijs.movies SET name = ?, year = ?, genre = ?," +
-  //           " director = ?, actor1 = ?, actor2 = ? WHERE id = ?",
-  //         [name, year, genre, director, actor1, actor2, editid],
-  //         (err, rows) => {
-  //           if (err) {
-  //             return db.rollback(function() {
-  //               throw err;
-  //             });
-  //           }
-
-  //           db.commit(function(err2) {
-  //             if (err2) {
-  //               return connection.rollback(function() {
-  //                 throw err2;
-  //               });
-  //             }
-  //             res.send("Success");
-  //           });
-  //         }
-  //       );
-  //     }
-  //   }); 
-  // },
-
+ 
 
   
 })
@@ -239,8 +169,6 @@ app.post("/add/:name/:year/:rank", (req, res) => {
   const movieYear = parseInt(req.params.year);
   const movieRank = parseInt(req.params.rank);
   const sqlMaxId = "SELECT MAX(id) as maxId FROM stadvdbmco2.movies"
-  const body = { id: id, name: movieName, year: movieYear, rank: movieRank }
-  console.log(body);
   const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
 
   console.log(movieName);
