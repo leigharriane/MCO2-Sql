@@ -47,7 +47,6 @@ const Movie = ({movie}) => {
                     <button onClick={() => deleteMovie(movie.id,movie.year)}  className="btn text-danger btn-act" data-toggle="modal"><i className="material-icons">&#xE872;</i></button>
                 </OverlayTrigger>
                 
-                
             </td>
 
             <Modal show={show} onHide={handleClose}>

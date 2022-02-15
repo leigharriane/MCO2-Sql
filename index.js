@@ -7,15 +7,7 @@ require("dotenv").config();
 const app = express();
 
 var db;
-
-// const db = mysql.createPool({
-//   host: 'transactionmanagement1.mysql.database.azure.com',
-//   user: 'adminuser',
-//   password: 'Password!23',
-//   database: 'stadvdbmco2',
-//   port: 3306,
-// });
-
+const port = process.env.PORT || 2020
 function connect() {
   db = mysql.createPool({
     host: 'transactionmanagement1.mysql.database.azure.com',
@@ -51,7 +43,7 @@ connect(); //change to your node
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.get("/readAll", (req, res) => {
+app.get("/getdata", (req, res) => {
   const sqlRead = "SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT 1000";
   connect(); //change to your node
   db.query(sqlRead, (err, result) => {
@@ -72,11 +64,6 @@ app.post("/createNew",(req,res)=>{
         console.log("Success")
     })
 })*/
-
-app.get("/kyle", (req, res) => {
-  res.send("hellokyle")
-})
-
 
 //DELETE
 app.delete("/delete/:id/:year", (req, res) => {
@@ -157,7 +144,6 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
   })
 })
 
-
 //ADD MOVIE
 app.post("/add/:name/:year/:rank", (req, res) => {
   const movieName = req.params.name;
@@ -204,6 +190,6 @@ app.post("/add/:name/:year/:rank", (req, res) => {
   })
 })
 
-app.listen(3001, () => {
-  console.log("Running on port 3001");
+app.listen(port, () => {
+  console.log("Running on port 2020");
 });
