@@ -18,7 +18,7 @@ const MovieList = () => {
     const handleClose = () => setShow(false);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [MoviesPerPage] = useState(10)
+    const [MoviesPerPage] = useState(50)
 
     const handleShowAlert = () => {
         setShowAlert(true);

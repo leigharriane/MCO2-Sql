@@ -93,6 +93,8 @@ const updateMovie = (updatedMovie) => {
     Axios.get(`http://localhost:3001/update/${updatedMovie.id}/${updatedMovie.name}/${updatedMovie.year}/${updatedMovie.rank}/${updatedMovie.prevYear}`);
     //app.put("/update/:id/:updateMovie.name/:updateMovie.year/:updateMovie.rank",(req,res)=>{
     //setMovies(data);//not sure ano ginagawa neto
+    alert(`Movie ID: ${updatedMovie.id} Updated`);
+    window.location = '/' // i.e. window.location='default.aspx'
 
 }
 
