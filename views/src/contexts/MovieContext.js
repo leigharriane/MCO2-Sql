@@ -36,9 +36,7 @@ useEffect(()=> {
 // },[])
 
 
-console.log(movies);
-const sortedMovies = movies.sort((a,b)=>(a.name < b.name ? -1 : 1));
-
+const sortedMovies = movies;
 
 // const addMovie = (name, rank, year) => {
 //     setMovies([...movies , {id:uuidv4(), name, year, rank}])
@@ -59,11 +57,14 @@ const addMovie = (name, year, rank) => {
 const deleteMovie = (id, year) => {
     console.log(id);
     console.log(year);
-    console.log(data.id);//undefined
+    console.log("hi");
+    console.log(data);
+    //console.log(data.id);//undefined
     //setMovies(movies.filter(movie => movie.id !== id))
     Axios.delete(`http://localhost:3001/delete/${id}/${year}`);
-    setMovies(data);//not sure ano ginagawa neto
+    //setMovies(data);//not sure ano ginagawa neto
 };
+
 
 /*
 const updateMovie = (id, updatedMovie) => {

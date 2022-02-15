@@ -46,18 +46,21 @@ function connect3() {
     });
 }
 
-connect3();
+connect();
+
+
+
 
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.get("/readAll", (req, res) => {
   const sqlRead = "SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT 10";
-  
+  connect();
   db.query(sqlRead, (err, result) => {
     if (err) console.log("ERROR: "+err);
     res.send(result);
-    //console.log(result);
+    console.log(result);
   });
 });
 
@@ -84,12 +87,12 @@ app.delete("/delete/:id/:year",(req,res)=>{
   const movieYear = req.params.year
   const sqlDelete = "DELETE FROM stadvdbmco2.movies WHERE id = ?"
 
+
   connect()
   db.query(sqlDelete, movieId,(err, result)=>{
     if (err) console.log("Error: "+err);
     console.log("Success-dlete node 1")
 })
-
 
   if(movieYear < 1980){
     connect2()
