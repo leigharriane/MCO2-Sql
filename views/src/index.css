@@ -155,7 +155,7 @@ table.table .avatar {
 	padding: 0 6px;
 }
 .pagination li a:hover {
-	color: rgb(238, 237, 237);
+	color: #4a1eaf;
 }	
 .pagination li.active a, .pagination li.active a.page-link {
 	background: #4a1eaf;
@@ -186,22 +186,28 @@ table.table .avatar {
 }
 .modal .modal-header, .modal .modal-body, .modal .modal-footer {
 	padding: 20px 30px;
+	border-color: #020222;
 }
 .modal .modal-content {
-	border-radius: 3px;
-	font-size: 14px;
-	background-color: #474747;
+	border-radius: 18px;
+	font-size: 12px;
+	background-color: #020222;
+
+}
+.modal close {
+	color: white !important;
 }
 .modal .modal-footer {
-	background: #474747;
+	background: #020222;
+	border-radius: 18px;
 }
 .modal .modal-title {
 	display: inline-block;
 }
 .modal .form-control {
-	border-radius: 8px;
+	border-radius: 4px;
 	box-shadow: none;
-	border-color: #090916;
+	border-color: #060630;
 }
 .modal textarea.form-control {
 	resize: vertical;
@@ -210,6 +216,12 @@ table.table .avatar {
 	border-radius: 2px;
 	min-width: 100px;
 }	
+.btn-secondary {
+	background-color:#292f3a;
+	border-color: #060630;
+	border-radius: 12px !important;
+	font-size: 12px;
+}
 .modal form label {
 	font-weight: normal;
 }	

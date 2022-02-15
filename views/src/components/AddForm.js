@@ -34,7 +34,7 @@ const AddForm = () =>{
             </Form.Group>
             <Form.Group>
                 <Form.Control
-                    type="email"
+                    type="text"
                     placeholder="Year *"
                     name="year"
                     classname="form-field"
@@ -45,13 +45,13 @@ const AddForm = () =>{
             </Form.Group>
             <Form.Group>
                 <Form.Control
-                    as="textarea"
-                    placeholder="Rank"
-                    rows={3}
+                    type="text"
+                    placeholder="Rank *"
                     name="rank"
                     classname="form-field"
                     value={rank}
                     onChange = { (e) => onInputChange(e)}
+                    required
                 />
             </Form.Group>
             <Button variant="success" type="submit" block>
