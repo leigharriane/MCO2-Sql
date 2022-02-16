@@ -146,21 +146,34 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
   const sqlDelete = "DELETE FROM stadvdbmco2.movies WHERE id = ?"
   const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
   const newbody = { id: movieId, name: movieName, year: movieYear, rank: movieRank }
-    
+
+  const log = "INSERT INTO stadvdbmco2.table_logs SET ?"
+  var nodenum = 0
+  var passnum = -1
   
   try {
     connect();
+    nodenum = 1;
+    passnum = 1;
     const sqlUpdate = "UPDATE stadvdbmco2.movies SET ? WHERE id=?"
     const body = { name: movieName, year: movieYear, rank: movieRank }
+    let logbody = { movie_id: movieId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlUpdate, node: nodenum, pass: passnum }
     db.query(sqlUpdate, [body, movieId], (err, result) => {
       if (err) console.log("Error: " + err);
       console.log("Success Updated Central Node!")
     })
+    db.query(log, logbody, (err, result) => {
+      console.log("Success - added log central")
+    })
   
     if (prevYear < 1980) {
+      nodenum = 2
+      passnum = 1
       connect2();
       deletenode = 2;
     } else if (prevYear >= 1980) {
+      nodenum = 3
+      passnum = 1
       connect3();
       deletenode = 3;
     }
@@ -169,11 +182,19 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
       if (err) console.log("Error: " + err);
       console.log("Success - deleted node " + deletenode);
     })
+    logbody = { movie_id: movieId, movie_name: movieName, movie_year: prevYear, movie_rank: movieRank, operation: sqlDelete, node: nodenum, pass: passnum }
+    db.query(log, logbody, (err, result) => {
+      console.log("Success - added log node 2")
+    })
   
     if (movieYear < 1980) {
+      nodenum = 2
+      passnum = 1
       connect2();
       addednode = 2;
     } else if (movieYear >= 1980) {
+      nodenum = 3
+      passnum = 1
       connect3();
       addednode = 3;
     }
@@ -182,41 +203,67 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
       if (err) console.log("Error: " + err);
       console.log("Success - added node " + addednode);
     })
+    logbody = { movie_id: movieId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+    db.query(log, logbody, (err, result) => {
+      console.log("Success - added log node 2")
+    })
 
   }catch(error){
-
+    nodenum = 1
+    passnum = 0
+    const sqlUpdate = "UPDATE stadvdbmco2.movies SET ? WHERE id=?"
     // did not connect to central node
 
     if (prevYear < 1980) {
       connect2();
+      let logbody = { movie_id: movieId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlUpdate, node: nodenum, pass: passnum }
+      db.query(log, logbody, (err, result) => {
+        console.log("Success - added log")
+      })
       deletenode = 2;
+      nodenum = 2
+      passnum = 1
     } else if (prevYear >= 1980) {
       connect3();
+      let logbody = { movie_id: movieId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlUpdate, node: nodenum, pass: passnum }
+      db.query(log, logbody, (err, result) => {
+        console.log("Success - added log")
+      })
       deletenode = 3;
+      nodenum = 3
+      passnum = 1
     }
-  
+
     db.query(sqlDelete, movieId, (err, result) => {
       if (err) console.log("Error: " + err);
       console.log("Success - deleted node " + deletenode);
+      let logbody = { movie_id: movieId, movie_name: movieName, movie_year: prevYear, movie_rank: movieRank, operation: sqlDelete, node: nodenum, pass: passnum }
+      db.query(log, logbody, (err, result) => {
+        console.log("Success - added log")
+      })
     })
   
     if (movieYear < 1980) {
       connect2();
       addednode = 2;
+      nodenum = 2
+      passnum = 1
     } else if (movieYear >= 1980) {
       connect3();
       addednode = 3;
+      nodenum = 3
+      passnum = 1
     }
   
     db.query(sqlInsert, newbody, (err, result) => {
       if (err) console.log("Error: " + err);
       console.log("Success - added node " + addednode);
+      let logbody = { movie_id: movieId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+      db.query(log, logbody, (err, result) => {
+        console.log("Success - added log")
+      })
     })
-    
-
   }
-
-
 })
 
 
