@@ -90,25 +90,45 @@ app.delete("/delete/:id/:year", (req, res) => {
   const movieYear = req.params.year
   const sqlDelete = "DELETE FROM stadvdbmco2.movies WHERE id = ?"
 
-  connect()
-  db.query(sqlDelete, movieId, (err, result) => {
-    if (err) console.log("Error: " + err);
-    console.log("Success-dlete node 1")
-  })
+  try{   connect()
+    db.query(sqlDelete, movieId, (err, result) => {
+      if (err) console.log("Error: " + err);
+      console.log("Success-dlete node 1")
+    })
 
-  if (movieYear < 1980) {
-    connect2()
-    db.query(sqlDelete, movieId, (err, result) => {
-      if (err) console.log("Error: " + err);
-      console.log("Success-delete node 2")
-    })
-  } else {
-    connect3()
-    db.query(sqlDelete, movieId, (err, result) => {
-      if (err) console.log("Error: " + err);
-      console.log("Success-delete node 3")
-    })
+    if (movieYear < 1980) {
+      connect2()
+      db.query(sqlDelete, movieId, (err, result) => {
+        if (err) console.log("Error: " + err);
+        console.log("Success-delete node 2")
+      })
+    } else {
+      connect3()
+      db.query(sqlDelete, movieId, (err, result) => {
+        if (err) console.log("Error: " + err);
+        console.log("Success-delete node 3")
+      })
+    }
+
+  }catch(error){  
+    // cannot connect to central node 
+
+    if (movieYear < 1980) {
+      connect2()
+      db.query(sqlDelete, movieId, (err, result) => {
+        if (err) console.log("Error: " + err);
+        console.log("Success-delete node 2")
+      })
+    } else {
+      connect3()
+      db.query(sqlDelete, movieId, (err, result) => {
+        if (err) console.log("Error: " + err);
+        console.log("Success-delete node 3")
+      })
+    }
+
   }
+
 
 })
 
@@ -126,40 +146,77 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
   const sqlDelete = "DELETE FROM stadvdbmco2.movies WHERE id = ?"
   const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
   const newbody = { id: movieId, name: movieName, year: movieYear, rank: movieRank }
+    
+  
+  try {
+    connect();
+    const sqlUpdate = "UPDATE stadvdbmco2.movies SET ? WHERE id=?"
+    const body = { name: movieName, year: movieYear, rank: movieRank }
+    db.query(sqlUpdate, [body, movieId], (err, result) => {
+      if (err) console.log("Error: " + err);
+      console.log("Success Updated Central Node!")
+    })
+  
+    if (prevYear < 1980) {
+      connect2();
+      deletenode = 2;
+    } else if (prevYear >= 1980) {
+      connect3();
+      deletenode = 3;
+    }
+  
+    db.query(sqlDelete, movieId, (err, result) => {
+      if (err) console.log("Error: " + err);
+      console.log("Success - deleted node " + deletenode);
+    })
+  
+    if (movieYear < 1980) {
+      connect2();
+      addednode = 2;
+    } else if (movieYear >= 1980) {
+      connect3();
+      addednode = 3;
+    }
+  
+    db.query(sqlInsert, newbody, (err, result) => {
+      if (err) console.log("Error: " + err);
+      console.log("Success - added node " + addednode);
+    })
 
-  connect();
-  const sqlUpdate = "UPDATE stadvdbmco2.movies SET ? WHERE id=?"
-  const body = { name: movieName, year: movieYear, rank: movieRank }
-  db.query(sqlUpdate, [body, movieId], (err, result) => {
-    if (err) console.log("Error: " + err);
-    console.log("Success Updated Central Node!")
-  })
+  }catch(error){
 
-  if (prevYear < 1980) {
-    connect2();
-    deletenode = 2;
-  } else if (prevYear >= 1980) {
-    connect3();
-    deletenode = 3;
+    // did not connect to central node
+
+    if (prevYear < 1980) {
+      connect2();
+      deletenode = 2;
+    } else if (prevYear >= 1980) {
+      connect3();
+      deletenode = 3;
+    }
+  
+    db.query(sqlDelete, movieId, (err, result) => {
+      if (err) console.log("Error: " + err);
+      console.log("Success - deleted node " + deletenode);
+    })
+  
+    if (movieYear < 1980) {
+      connect2();
+      addednode = 2;
+    } else if (movieYear >= 1980) {
+      connect3();
+      addednode = 3;
+    }
+  
+    db.query(sqlInsert, newbody, (err, result) => {
+      if (err) console.log("Error: " + err);
+      console.log("Success - added node " + addednode);
+    })
+    
+
   }
 
-  db.query(sqlDelete, movieId, (err, result) => {
-    if (err) console.log("Error: " + err);
-    console.log("Success - deleted node " + deletenode);
-  })
 
-  if (movieYear < 1980) {
-    connect2();
-    addednode = 2;
-  } else if (movieYear >= 1980) {
-    connect3();
-    addednode = 3;
-  }
-
-  db.query(sqlInsert, newbody, (err, result) => {
-    if (err) console.log("Error: " + err);
-    console.log("Success - added node " + addednode);
-  })
 })
 
 
