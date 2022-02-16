@@ -171,115 +171,114 @@ app.post("/add/:name/:year/:rank", (req, res) => {
   const sqlMaxId = "SELECT MAX(id) as maxId FROM stadvdbmco2.movies"
   const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
   const log = "INSERT INTO stadvdbmco2.table_logs SET ?"
-  var passnode1 = 0
-  var passnode2 = 0
-  var passnode3 = 0
-  var new_Id = 999999999
+  var nodenum = 0
+  var passnum = -1
 
   try {    
-    connect() // connected to central node
-    passnode1 = 1;
 
+    connect() // connected to central node
+    nodenum = 1;
+    passnum = 1;
     db.query(sqlMaxId, (err, result) => {
     if (err) console.log("Error query: " + err);
     else {
       let newId = result[0].maxId + 1;
-      new_Id = newId
-      console.log("tingin ka dito new_Id" + new_Id)
       console.log("result", result[0].maxId);
       console.log("newId", newId);
       let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
-      
+      let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
       db.query(sqlInsert, newbody, (err, result) => {
         if (err) console.log("Error: " + err);
         console.log("Success - added node 1")
       })
-      let logbody = { movie_id: new_Id, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, pass_node1: passnode1, pass_node2: passnode2, pass_node3: passnode3}
       db.query(log, logbody, (err, result) => {
-    
+        console.log("Success - added log central")
       })
 
       if (movieYear < 1980) {
         connect2()
-        passnode2 = 1
-
+        nodenum = 2
+        passnum = 1
         let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
+        let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
         db.query(sqlInsert, newbody, (err, result) => {
           if (err) console.log("Error: " + err);
           console.log("Success - added node 2")
         })
-        let logbody = { movie_id: new_Id, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, pass_node1: passnode1, pass_node2: passnode2, pass_node3: passnode3}
         db.query(log, logbody, (err, result) => {
-      
+          console.log("Success - added log node 2")
         })
-      
       } else {
         connect3()
-        passnode3 = 1
-
+        nodenum = 3
+        passnum = 1
         let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
+        let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
         db.query(sqlInsert, newbody, (err, result) => {
           if (err) console.log("Error: " + err);
           console.log("Success -  added node 3", newbody)
         })
-        let logbody = { movie_id: new_Id, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, pass_node1: passnode1, pass_node2: passnode2, pass_node3: passnode3}
         db.query(log, logbody, (err, result) => {
-      
+          console.log("Success - added log node 3")
         })
-      }
-
-    }
-  })
+     }
+   }
+ })
+    
   }catch(error){
     connect2() // connected to node 2
-    passnode1 = 0
-
+    nodenum = 1
+    passnum = 0
+    
     db.query(sqlMaxId, (err, result) => {
       if (err) console.log("Error: " + err);
       else {
         let node2Id = result[0].maxId + 1;
         connect3() // connected to node 3
-
         db.query(sqlMaxId, (err, result) => {
           if (err) console.log("Error: " + err);
           else {
             let node3Id = result[0].maxId + 1;
             let newId = Math.max(node2Id, node3Id);
-            new_Id = newId
-            console.log("tingin ka dito new_Id" + new_Id)
             let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
 
             if (movieYear < 1980) {
               connect2() // connected to node 2
-              
+              let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+              db.query(log, logbody, (err, result) => {
+                console.log("Success - added log")
+              })
               db.query(sqlInsert, newbody, (err, result) => {
-                if (err) {
-                  console.log("Error: " + err);
-                  passnode2 = 0
-                }
+                if (err) console.log("Error: " + err);
                 console.log("Success NODE 2");
-                passnode2 = 1
+                nodenum = 2
+                passnum = 1
+                let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+                db.query(log, logbody, (err, result) => {
+                  console.log("Success - added log")
+                })
               });
             } else {
               connect3() // connected to node 3
-              
+              let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+              db.query(log, logbody, (err, result) => {
+                console.log("Success - added log")
+              })
               db.query(sqlInsert, newbody, (err, result) => {
-                if (err) {
-                  console.log("Error: " + err);
-                  passnode3 = 0
-                }
+                if (err) console.log("Error: " + err);
                 console.log("Success");
-                passnode3 = 1
+                nodenum = 3
+                passnum = 1
+                let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+                db.query(log, logbody, (err, result) => {
+                  console.log("Success - added log")
+                })
               });
             }
           }
         });
       }
     });
-    let logbody = { movie_id: new_Id, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, pass_node1: passnode1, pass_node2: passnode2, pass_node3: passnode3}
-    db.query(log, logbody, (err, result) => {
-  
-    })
   }
   
 })
