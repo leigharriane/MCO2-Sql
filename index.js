@@ -39,7 +39,7 @@ function connect3() {
   });
 }
 
-connect2(); //change to your node
+connect(); //change to your node
 
 app.use(cors())
 app.use(express.json())
@@ -77,6 +77,8 @@ app.get("/getdata", (req, res) => {
         res.send(movies);
       });
     });
+  }
+});
 
 app.get("/addData", (req, res) => {
  limit+=100; 
@@ -162,28 +164,25 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
 })
 
 //ADD MOVIE
+
+
 app.post("/add/:name/:year/:rank", (req, res) => {
   const movieName = req.params.name;
   const movieYear = parseInt(req.params.year);
   const movieRank = parseInt(req.params.rank);
   const sqlMaxId = "SELECT MAX(id) as maxId FROM stadvdbmco2.movies"
   const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
-
-  console.log(movieName);
-  console.log(movieYear);
-  console.log(movieRank);
-
-  connect()
-
-  db.query(sqlMaxId, (err, result) => {
+  try {
+ 
+    
+    connect() // connected to central node
+    db.query(sqlMaxId, (err, result) => {
     if (err) console.log("Error query: " + err);
     else {
       let newId = result[0].maxId + 1;
       console.log("result", result[0].maxId);
       console.log("newId", newId);
       let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
-
-      connect()
       db.query(sqlInsert, newbody, (err, result) => {
         if (err) console.log("Error: " + err);
         console.log("Success - added node 1")
@@ -191,12 +190,16 @@ app.post("/add/:name/:year/:rank", (req, res) => {
 
       if (movieYear < 1980) {
         connect2()
+        let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
+
         db.query(sqlInsert, newbody, (err, result) => {
           if (err) console.log("Error: " + err);
           console.log("Success - added node 2")
         })
       } else {
         connect3()
+        let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
+
         db.query(sqlInsert, newbody, (err, result) => {
           if (err) console.log("Error: " + err);
           console.log("Success -  added node 3", newbody)
@@ -205,7 +208,87 @@ app.post("/add/:name/:year/:rank", (req, res) => {
 
     }
   })
+    
+  }catch(error){
+  
+    connect2() // connected to node 2
+
+    db.query(sqlMaxId, (err, result) => {
+      if (err) console.log("Error: " + err);
+      else {
+        let node2Id = result[0].maxId + 1;
+        connect3() // connected to node 3
+        db.query(sqlMaxId, (err, result) => {
+          if (err) console.log("Error: " + err);
+          else {
+            let node3Id = result[0].maxId + 1;
+            let newId = Math.max(node2Id, node3Id);
+            let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
+
+            if (movieYear < 1980) {
+              connect2() // connected to node 2
+
+              db.query(sqlInsert, newbody, (err, result) => {
+                if (err) console.log("Error: " + err);
+                console.log("Success NODE 2");
+              });
+            } else {
+              connect3() // connected to node 3
+
+              db.query(sqlInsert, newbody, (err, result) => {
+                if (err) console.log("Error: " + err);
+                console.log("Success");
+              });
+            }
+          }
+        });
+      }
+    });
+
+  }
+  
 })
+
+// app.post("/add/:name/:year/:rank", (req, res) => {
+//   const movieName = req.params.name;
+//   const movieYear = parseInt(req.params.year);
+//   const movieRank = parseInt(req.params.rank);
+//   const sqlMaxId = "SELECT MAX(id) as maxId FROM stadvdbmco2.movies"
+//   const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
+//   connect() 
+//   db.query(sqlMaxId, (err, result) => {
+//     if (err) console.log("Error query: " + err);
+//     else {
+//       let newId = result[0].maxId + 1;
+//       console.log("result", result[0].maxId);
+//       console.log("newId", newId);
+//       let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
+
+//       connect()
+//       db.query(sqlInsert, newbody, (err, result) => {
+//         if (err) console.log("Error: " + err);
+//         console.log("Success - added node 1")
+//       })
+
+//       if (movieYear < 1980) {
+//         connect2()
+//         db.query(sqlInsert, newbody, (err, result) => {
+//           if (err) console.log("Error: " + err);
+//           console.log("Success - added node 2")
+//         })
+//       } else {
+//         connect3()
+//         db.query(sqlInsert, newbody, (err, result) => {
+//           if (err) console.log("Error: " + err);
+//           console.log("Success -  added node 3", newbody)
+//         })
+//       }
+
+//     }
+//   })
+// })
+
+
 
 app.listen(port, () => {
   console.log("Running on port 2020");
