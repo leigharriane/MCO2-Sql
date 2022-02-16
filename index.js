@@ -5,7 +5,7 @@ const bodyParser = require("body-parser")
 require("dotenv").config();
 
 const app = express();
-var limit = 100; 
+var limit = 100;
 
 var db;
 const port = process.env.PORT || 2020
@@ -39,30 +39,54 @@ function connect3() {
   });
 }
 
-connect(); //change to your node
+connect2(); //change to your node
 
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+// READ DATA
+
+
 app.get("/getdata", (req, res) => {
   const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT ${limit}`;
-  
-  connect(); //change to your node
-  db.query(sqlRead, (err, result) => {
-    if (err) console.log("ERROR: " + err);
-    res.send(result);
-    //console.log(result);
-  });
-});
+  // CENTRAL NODE IS NOT ONLINE
+  try {
+    connect(); //change to your node
+    db.query(sqlRead, (err, result) => {
+      if (err) console.log("ERROR: " + err);
+      res.send(result);
+      //console.log(result);
+    });
 
+  } catch (error) {
+    let movies = [];
+    console.log("NOT CENTRAL NODE READ")
+
+     connect2(); 
+      db.query(sqlRead, (err, result) => {
+      if (err) console.log("NODE 2 ERROR: " + err);
+      movies = movies.concat(result);
+
+      connect3(); 
+
+      db.query(sqlRead, (err, result) => {
+        if (err) console.log("NODE 3 ERROR: " + err);
+        movies = movies.concat(result);
+        movies.sort((a, b) => (a.id < b.id ? 1 : b.id < a.id ? -1 : 0));
+        res.send(movies);
+      });
+    });
+
+
+  }
+
+});
 
 
 app.get("/addData", (req, res) => {
- limit+=100; 
+  limit += 100;
 });
-
-
 
 /*
 app.post("/createNew",(req,res)=>{
@@ -168,7 +192,7 @@ app.post("/add/:name/:year/:rank", (req, res) => {
   console.log(movieRank);
 
   connect()
-  
+
   db.query(sqlMaxId, (err, result) => {
     if (err) console.log("Error query: " + err);
     else {
@@ -176,7 +200,7 @@ app.post("/add/:name/:year/:rank", (req, res) => {
       console.log("result", result[0].maxId);
       console.log("newId", newId);
       let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
-      
+
       connect()
       db.query(sqlInsert, newbody, (err, result) => {
         if (err) console.log("Error: " + err);
