@@ -8,11 +8,6 @@ const Movie = ({movie}) => {
 
    const {deleteMovie} = useContext(MovieContext)
 
-    //const deleteMovie = (MovieContext) => {
-    //Axios.delete(`http://localhost:3001/delete/${MovieContext}`);
-    //};
-
-
     const [show, setShow] = useState(false);
     
     const handleShow = () => setShow(true);

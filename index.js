@@ -56,25 +56,9 @@ app.get("/getdata", (req, res) => {
   });
 });
 
-
-
 app.get("/addData", (req, res) => {
  limit+=100; 
 });
-
-
-
-/*
-app.post("/createNew",(req,res)=>{
-    const movieName = req.body.name;
-    const movieYear = req.body.year;
-    const movieRank = req.body.rank;
-    const sqlInsert = "INSERT INTO stadvdbmco2.movies (name, year, rank) VALUES (?,?)"
-    db.query(sqlInsert,[movieName,movieYear,movieRank],(err, result)=>{
-        if (err) console.log("Error: "+err);
-        console.log("Success")
-    })
-})*/
 
 //DELETE
 app.delete("/delete/:id/:year", (req, res) => {
