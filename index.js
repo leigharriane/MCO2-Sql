@@ -175,7 +175,6 @@ app.post("/add/:name/:year/:rank", (req, res) => {
   var passnum = -1
 
   try {    
-
     connect() // connected to central node
     nodenum = 1;
     passnum = 1;
@@ -229,7 +228,6 @@ app.post("/add/:name/:year/:rank", (req, res) => {
     connect2() // connected to node 2
     nodenum = 1
     passnum = 0
-    
     db.query(sqlMaxId, (err, result) => {
       if (err) console.log("Error: " + err);
       else {
