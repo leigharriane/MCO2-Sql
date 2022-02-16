@@ -63,12 +63,12 @@ app.get("/getdata", (req, res) => {
     let movies = [];
     console.log("NOT CENTRAL NODE READ")
 
-     connect2(); 
-      db.query(sqlRead, (err, result) => {
+    connect2();
+    db.query(sqlRead, (err, result) => {
       if (err) console.log("NODE 2 ERROR: " + err);
       movies = movies.concat(result);
 
-      connect3(); 
+      connect3();
 
       db.query(sqlRead, (err, result) => {
         if (err) console.log("NODE 3 ERROR: " + err);
@@ -81,7 +81,7 @@ app.get("/getdata", (req, res) => {
 });
 
 app.get("/addData", (req, res) => {
- limit+=100; 
+  limit += 100;
 });
 
 //DELETE
@@ -89,43 +89,111 @@ app.delete("/delete/:id/:year", (req, res) => {
   const movieId = req.params.id
   const movieYear = req.params.year
   const sqlDelete = "DELETE FROM stadvdbmco2.movies WHERE id = ?"
+  const log = "INSERT INTO stadvdbmco2.table_logs SET ?"
+  var nodenum = 0
+  var passnum = -1
 
-  try{   connect()
+  try {
+    connect()
+
     db.query(sqlDelete, movieId, (err, result) => {
       if (err) console.log("Error: " + err);
-      console.log("Success-dlete node 1")
+      console.log("Success-delete node 1")
+
     })
 
-    if (movieYear < 1980) {
-      connect2()
-      db.query(sqlDelete, movieId, (err, result) => {
-        if (err) console.log("Error: " + err);
-        console.log("Success-delete node 2")
+    nodenum = 1;
+      passnum = 1;
+      let logbody = { movie_id:  movieId, movie_year: movieYear, operation: sqlDelete, node: nodenum, pass: passnum }
+      console.log("logbody",logbody);
+      db.query(log, logbody, (err, result) => {
+        console.log("Success - added log - central delete passed")
       })
-    } else {
-      connect3()
-      db.query(sqlDelete, movieId, (err, result) => {
-        if (err) console.log("Error: " + err);
-        console.log("Success-delete node 3")
-      })
-    }
-
-  }catch(error){  
-    // cannot connect to central node 
 
     if (movieYear < 1980) {
       connect2()
       db.query(sqlDelete, movieId, (err, result) => {
         if (err) console.log("Error: " + err);
-        console.log("Success-delete node 2")
+       
+
       })
+
+      console.log("Success-delete node 2")
+      nodenum = 2
+      passnum = 1
+      let logbody = { movie_id:  movieId, movie_year: movieYear, operation: sqlDelete, node: nodenum, pass: passnum }
+      db.query(log, logbody, (err, result) => {
+        console.log("Success - added log - delete node 2")
+      })
+
     } else {
       connect3()
       db.query(sqlDelete, movieId, (err, result) => {
         if (err) console.log("Error: " + err);
         console.log("Success-delete node 3")
+       
+
+      })
+
+      nodenum = 3
+      passnum = 1
+      let logbody = { movie_id:  movieId, movie_year: movieYear, operation: sqlDelete, node: nodenum, pass: passnum }
+      db.query(log, logbody, (err, result) => {
+        console.log("Success - added log - delete node 3")
       })
     }
+
+  } catch (error) {
+
+        // cannot connect to central node 
+
+
+    if (movieYear < 1980) {
+      connect2()
+      nodenum = 1;
+      passnum = 0;
+      let logbody = { movie_id:  movieId, movie_year: movieYear, operation: sqlDelete, node: nodenum, pass: passnum }
+      console.log("logbody",logbody);
+      db.query(log, logbody, (err, result) => {
+        console.log("Success - added log - central delete failed")
+      })
+      db.query(sqlDelete, movieId, (err, result) => {
+        if (err) console.log("Error: " + err);
+
+
+      })
+      console.log("Success-delete node 2")
+      nodenum = 2
+      passnum = 1
+      logbody = { movie_id:  movieId, movie_year: movieYear, operation: sqlDelete, node: nodenum, pass: passnum }
+      db.query(log, logbody, (err, result) => {
+        console.log("Success - added log - delete node 2 ")
+      })
+    } else {
+      connect3()
+      nodenum = 1
+      passnum = 0
+      let logbody = { movie_id:  movieId, movie_name: "", movie_year: movieYear, movie_rank: "", operation: sqlDelete, node: nodenum, pass: passnum }
+      db.query(log, logbody, (err, result) => {
+        console.log("Success - added log - central delete failed")
+      })
+
+      db.query(sqlDelete, movieId, (err, result) => {
+        if (err) console.log("Error: " + err);
+        console.log("Success-delete node 3")
+        nodenum = 3
+        passnum = 1
+        let logbody = { movie_id:  movieId, movie_year: movieYear, operation: sqlDelete, node: nodenum, pass: passnum }
+        db.query(log, logbody, (err, result) => {
+          console.log("Success - added log - delete")
+        })
+
+      })
+    }
+
+
+
+
 
   }
 
@@ -177,7 +245,7 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
       connect3();
       deletenode = 3;
     }
-  
+
     db.query(sqlDelete, movieId, (err, result) => {
       if (err) console.log("Error: " + err);
       console.log("Success - deleted node " + deletenode);
@@ -198,7 +266,7 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
       connect3();
       addednode = 3;
     }
-  
+
     db.query(sqlInsert, newbody, (err, result) => {
       if (err) console.log("Error: " + err);
       console.log("Success - added node " + addednode);
@@ -242,7 +310,7 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
         console.log("Success - added log")
       })
     })
-  
+
     if (movieYear < 1980) {
       connect2();
       addednode = 2;
@@ -254,7 +322,7 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
       nodenum = 3
       passnum = 1
     }
-  
+
     db.query(sqlInsert, newbody, (err, result) => {
       if (err) console.log("Error: " + err);
       console.log("Success - added node " + addednode);
@@ -263,6 +331,8 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
         console.log("Success - added log")
       })
     })
+
+
   }
 })
 
@@ -278,57 +348,58 @@ app.post("/add/:name/:year/:rank", (req, res) => {
   var nodenum = 0
   var passnum = -1
 
-  try {    
+  try {
+
     connect() // connected to central node
     nodenum = 1;
     passnum = 1;
     db.query(sqlMaxId, (err, result) => {
-    if (err) console.log("Error query: " + err);
-    else {
-      let newId = result[0].maxId + 1;
-      console.log("result", result[0].maxId);
-      console.log("newId", newId);
-      let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
-      let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
-      db.query(sqlInsert, newbody, (err, result) => {
-        if (err) console.log("Error: " + err);
-        console.log("Success - added node 1")
-      })
-      db.query(log, logbody, (err, result) => {
-        console.log("Success - added log central")
-      })
+      if (err) console.log("Error query: " + err);
+      else {
+        let newId = result[0].maxId + 1;
+        console.log("result", result[0].maxId);
+        console.log("newId", newId);
+        let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
+        let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+        db.query(sqlInsert, newbody, (err, result) => {
+          if (err) console.log("Error: " + err);
+          console.log("Success - added node 1")
+        })
+        db.query(log, logbody, (err, result) => {
+          console.log("Success - added log central")
+        })
 
-      if (movieYear < 1980) {
-        connect2()
-        nodenum = 2
-        passnum = 1
-        let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
-        let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
-        db.query(sqlInsert, newbody, (err, result) => {
-          if (err) console.log("Error: " + err);
-          console.log("Success - added node 2")
-        })
-        db.query(log, logbody, (err, result) => {
-          console.log("Success - added log node 2")
-        })
-      } else {
-        connect3()
-        nodenum = 3
-        passnum = 1
-        let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
-        let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
-        db.query(sqlInsert, newbody, (err, result) => {
-          if (err) console.log("Error: " + err);
-          console.log("Success -  added node 3", newbody)
-        })
-        db.query(log, logbody, (err, result) => {
-          console.log("Success - added log node 3")
-        })
-     }
-   }
- })
-    
-  }catch(error){
+        if (movieYear < 1980) {
+          connect2()
+          nodenum = 2
+          passnum = 1
+          let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
+          let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+          db.query(sqlInsert, newbody, (err, result) => {
+            if (err) console.log("Error: " + err);
+            console.log("Success - added node 2")
+          })
+          db.query(log, logbody, (err, result) => {
+            console.log("Success - added log node 2")
+          })
+        } else {
+          connect3()
+          nodenum = 3
+          passnum = 1
+          let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
+          let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+          db.query(sqlInsert, newbody, (err, result) => {
+            if (err) console.log("Error: " + err);
+            console.log("Success -  added node 3", newbody)
+          })
+          db.query(log, logbody, (err, result) => {
+            console.log("Success - added log node 3")
+          })
+        }
+      }
+    })
+
+  } catch (error) {
     connect2() // connected to node 2
     nodenum = 1
     passnum = 0
@@ -382,7 +453,7 @@ app.post("/add/:name/:year/:rank", (req, res) => {
       }
     });
   }
-  
+
 })
 
 // app.post("/add/:name/:year/:rank", (req, res) => {
