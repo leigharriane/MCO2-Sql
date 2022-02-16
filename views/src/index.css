@@ -8,6 +8,19 @@ body {
 	font-size: 13px;
 }
 
+.addMore {
+	background-color: white;
+	border-radius: 5px;
+}
+.addMore a {
+	color:black! important;
+	
+}
+.addMore a:hover {
+	color:#4e1ec0 !important;
+	
+}
+
 .btn-success, .btn-success:visited, .btn-success:hover, .btn-success:active, .btn-success:focus {
 	background-color:#4e1ec0 !important;
 	border-color:rgb(70, 69, 69) !important;
