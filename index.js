@@ -5,6 +5,7 @@ const bodyParser = require("body-parser")
 require("dotenv").config();
 
 const app = express();
+var limit = 100; 
 
 var db;
 const port = process.env.PORT || 2020
@@ -43,15 +44,25 @@ connect(); //change to your node
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
 app.get("/getdata", (req, res) => {
-  const sqlRead = "SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT 1000";
+  const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT ${limit}`;
+  
   connect(); //change to your node
   db.query(sqlRead, (err, result) => {
     if (err) console.log("ERROR: " + err);
     res.send(result);
-    console.log(result);
+    //console.log(result);
   });
 });
+
+
+
+app.get("/addData", (req, res) => {
+ limit+=100; 
+});
+
+
 
 /*
 app.post("/createNew",(req,res)=>{

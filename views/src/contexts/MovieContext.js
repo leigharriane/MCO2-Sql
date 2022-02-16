@@ -65,6 +65,13 @@ const deleteMovie = (id, year) => {
     //setMovies(data);//not sure ano ginagawa neto
 };
 
+const addData= () => { 
+   console.log("pumasok movie")
+    //setMovies(movies.filter(movie => movie.id !== id))
+    Axios.get(`${process.env.REACT_APP_VIEWSHOST}/addData`);
+};
+ 
+
 const updateMovie = (updatedMovie) => {
     //console.log(id);
     //const name = req.body.name
@@ -82,7 +89,7 @@ const updateMovie = (updatedMovie) => {
 }
 
     return (
-        <MovieContext.Provider value={{sortedMovies, addMovie, deleteMovie, updateMovie}}>
+        <MovieContext.Provider value={{sortedMovies, addMovie, deleteMovie, updateMovie,addData}}>
             {props.children}
         </MovieContext.Provider>
         
