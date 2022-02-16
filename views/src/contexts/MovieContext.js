@@ -53,28 +53,22 @@ const addMovie = (name, year, rank) => {
 
 const deleteMovie = (id, year) => {
     alert(`Movie id: ${id} Deleted`);
-    window.location = '/' // i.e. window.location='default.aspx'
+    window.location = '/'
 
     console.log(id);
     console.log(year);
     console.log(data);
-    //console.log(data.id);//undefined
-    //setMovies(movies.filter(movie => movie.id !== id))
     Axios.delete(`${process.env.REACT_APP_VIEWSHOST}/delete/${id}/${year}`);
-    //window.location.reload();
-    //setMovies(data);//not sure ano ginagawa neto
 };
 
 const addData= () => { 
-   console.log("pumasok movie")
-    //setMovies(movies.filter(movie => movie.id !== id))
+    console.log("pumasok movie")
     Axios.get(`${process.env.REACT_APP_VIEWSHOST}/addData`);
 };
  
 
 const updateMovie = (updatedMovie) => {
-    //console.log(id);
-    //const name = req.body.name
+
     console.log(updatedMovie.id)
     console.log(updatedMovie.name)
     console.log(updatedMovie.year)
@@ -82,8 +76,6 @@ const updateMovie = (updatedMovie) => {
     console.log(updatedMovie.prevYear)
     //setMovies(movies.map((data) => data.id === id ? updatedMovie : data))
     Axios.get(`${process.env.REACT_APP_VIEWSHOST}/update/${updatedMovie.id}/${updatedMovie.name}/${updatedMovie.year}/${updatedMovie.rank}/${updatedMovie.prevYear}`);
-    //app.put("/update/:id/:updateMovie.name/:updateMovie.year/:updateMovie.rank",(req,res)=>{
-    //setMovies(data);//not sure ano ginagawa neto
     alert(`Movie ID: ${updatedMovie.id} Updated`);
     window.location = '/' // i.e. window.location='default.aspx'
 }
