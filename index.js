@@ -3,10 +3,8 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const bodyParser = require("body-parser")
 require("dotenv").config();
-
 const app = express();
 var limit = 100;
-
 var db;
 const port = process.env.PORT || 2020
 function connect() {
@@ -48,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // READ DATA
 app.get("/getdata", (req, res) => {
-  const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT ${limit}`;
+  const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id  ASC LIMIT ${limit}`;
   const readLog = 'SELECT * FROM stadvdbmco2.table_logs WHERE pass = 0';
   // CENTRAL NODE IS NOT ONLINE
   try {
@@ -57,7 +55,6 @@ app.get("/getdata", (req, res) => {
     connect();
     db.query(readLog, (err, result) => {
       logArray = logArray.concat(result);
-      // console.log("result node 1", result);
       //get logs from node 3
       connect2();
       db.query(readLog, (err, result) => {
@@ -67,7 +64,6 @@ app.get("/getdata", (req, res) => {
       connect3();
       db.query(readLog, (err, result) => {
         logArray = logArray.concat(result);
-       
       });
       // loop log operations and implement them on the nodes that have failed
       for (let i = 0; i < logArray.length; i++) {
