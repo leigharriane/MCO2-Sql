@@ -49,15 +49,96 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // READ DATA
 app.get("/getdata", (req, res) => {
+
+  const sqlInsert = "INSERT INTO stadvdbmco2.movies SET ?"
+
   const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT ${limit}`;
+  const readLog = 'SELECT * FROM stadvdbmco2.table_logs WHERE pass = 0';
+
   // CENTRAL NODE IS NOT ONLINE
   try {
-    connect(); //change to your node
-    db.query(sqlRead, (err, result) => {
-      if (err) console.log("ERROR: " + err);
-      res.send(result);
-      //console.log(result);
-    });
+    let logArray = []
+
+    //get logs from node 2
+    connect();
+    db.query(readLog, (err, result) => {
+      logArray = logArray.concat(result);
+      console.log("result node 1", result);
+
+      console.log("log Array from node 1 " + logArray[0]);
+
+      //get logs from node 3
+      connect2();
+      db.query(readLog, (err, result) => {
+        logArray = logArray.concat(result);
+        console.log("result node 2", logArray);
+       // logArray = logArray.concat(result)
+      //  console.log("log Array from node 2 " + logArray[0]);
+        // console.log("logarray ito "+ logArray);
+      });
+
+      // get logs from central node
+      connect3();
+      db.query(readLog, (err, result) => {
+        logArray = logArray.concat(result);
+        console.log("result node 3", logArray);
+     //   logArray = logArray.concat(result)
+      //  console.log("log Array from node 3 " + logArray[0]);
+        // console.log("logarray ito "+ logArray);
+      });
+
+      console.log("after all the nodes   "+logArray);
+      
+      // loop log operations and implement them on the nodes that have failed
+
+      console.log(" NODES BEFORE THE LOOP " + logArray);
+      for (let i = 0; i < logArray.length; i++) {
+        console.log("meron ba dito");
+        var push_operations = {
+          operation: logArray[i].operation,
+          node: logArray[i].node,
+          pass: logArray[i].pass
+        }
+        var push_body = {
+          name: logArray[i].movie_name,
+          id: logArray[i].movie_id,
+          year: logArray[i].movie_year,
+          rank: logArray[i].movie_rank
+        }
+
+        console.log("operation" + push_operations.operation );
+
+        if(push_operations.node == 1 && push_operations.pass == 0) {
+          connect();
+          db.query(push_operations.operation, push_body, (err, result) => {
+            console.log("node 1 success  "+ push_operations.operation)
+          })
+        }
+        if (push_operations.node == 2 && push_operations.pass == 0) {
+          connect2();
+          db.query(push_operations.operation, push_body, (err, result) => {
+            console.log("node 2 success  "+ push_operations.operation)
+          })
+        }
+        if (push_operations.node == 3 && push_operations.pass == 0) {
+          db.query(push_operations.operation, push_body, (err, result) => {
+            console.log("node 3 success  "+ push_operations.operation)
+          })
+        }
+        
+      };
+    
+
+      connect(); //change to your node
+      db.query(sqlRead, (err, result) => {
+        if (err) console.log("ERROR: " + err);
+        // result.sort((a, b) => (a.id < b.id ? 1 : b.id < a.id ? -1 : 0));
+        res.send(result);
+      });
+    })
+
+   // console.log(logArray[0])
+  
 
   } catch (error) {
     let movies = [];
@@ -69,7 +150,6 @@ app.get("/getdata", (req, res) => {
       movies = movies.concat(result);
 
       connect3();
-
       db.query(sqlRead, (err, result) => {
         if (err) console.log("NODE 3 ERROR: " + err);
         movies = movies.concat(result);
@@ -99,7 +179,6 @@ app.delete("/delete/:id/:year", (req, res) => {
     db.query(sqlDelete, movieId, (err, result) => {
       if (err) console.log("Error: " + err);
       console.log("Success-delete node 1")
-
     })
 
     nodenum = 1;
@@ -113,7 +192,15 @@ app.delete("/delete/:id/:year", (req, res) => {
     if (movieYear < 1980) {
       connect2()
       db.query(sqlDelete, movieId, (err, result) => {
-        if (err) console.log("Error: " + err);
+        if (err){
+          connect();
+          nodenum=2
+          passnum=0
+          db.query(log, logbody, (err, result) => {
+            console.log("Success - added log node 2")
+          })
+          console.log("Error: " + err);
+        }
        
 
       })
@@ -129,10 +216,16 @@ app.delete("/delete/:id/:year", (req, res) => {
     } else {
       connect3()
       db.query(sqlDelete, movieId, (err, result) => {
-        if (err) console.log("Error: " + err);
+        if (err){
+          connect();
+          nodenum=3
+          passnum=0
+          db.query(log, logbody, (err, result) => {
+            console.log("Success - added log node 2")
+          })
+          console.log("Error: " + err);
+        }
         console.log("Success-delete node 3")
-       
-
       })
 
       nodenum = 3
@@ -147,7 +240,6 @@ app.delete("/delete/:id/:year", (req, res) => {
 
         // cannot connect to central node 
 
-
     if (movieYear < 1980) {
       connect2()
       nodenum = 1;
@@ -159,8 +251,6 @@ app.delete("/delete/:id/:year", (req, res) => {
       })
       db.query(sqlDelete, movieId, (err, result) => {
         if (err) console.log("Error: " + err);
-
-
       })
       console.log("Success-delete node 2")
       nodenum = 2
@@ -190,14 +280,7 @@ app.delete("/delete/:id/:year", (req, res) => {
 
       })
     }
-
-
-
-
-
   }
-
-
 })
 
 //UPDATE
@@ -247,7 +330,14 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
     }
 
     db.query(sqlDelete, movieId, (err, result) => {
-      if (err) console.log("Error: " + err);
+      if (err){
+        connect();
+        passnum=0
+        db.query(log, logbody, (err, result) => {
+          console.log("Success - added log node 2")
+        })
+        console.log("Error: " + err);
+      }
       console.log("Success - deleted node " + deletenode);
     })
     logbody = { movie_id: movieId, movie_name: movieName, movie_year: prevYear, movie_rank: movieRank, operation: sqlDelete, node: nodenum, pass: passnum }
@@ -268,7 +358,14 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
     }
 
     db.query(sqlInsert, newbody, (err, result) => {
-      if (err) console.log("Error: " + err);
+      if (err){
+        connect();
+        passnum=0
+        db.query(log, logbody, (err, result) => {
+          console.log("Success - added log node 2")
+        })
+        console.log("Error: " + err);
+      }
       console.log("Success - added node " + addednode);
     })
     logbody = { movie_id: movieId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
@@ -331,8 +428,6 @@ app.get("/update/:id/:name/:year/:rank/:prevYear", (req, res) => {
         console.log("Success - added log")
       })
     })
-
-
   }
 })
 
@@ -362,7 +457,7 @@ app.post("/add/:name/:year/:rank", (req, res) => {
         let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
         let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
         db.query(sqlInsert, newbody, (err, result) => {
-          if (err) console.log("Error: " + err);
+          if (err){ console.log("Error: " + err); }
           console.log("Success - added node 1")
         })
         db.query(log, logbody, (err, result) => {
@@ -376,7 +471,16 @@ app.post("/add/:name/:year/:rank", (req, res) => {
           let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
           let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
           db.query(sqlInsert, newbody, (err, result) => {
-            if (err) console.log("Error: " + err);
+            if (err) {
+              console.log("Error: " + err);
+              connect();
+              nodenum=2
+              passnum=0
+              logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+              db.query(log, logbody, (err, result) => {
+                console.log("Success - added log node 2")
+              })
+            }
             console.log("Success - added node 2")
           })
           db.query(log, logbody, (err, result) => {
@@ -389,7 +493,16 @@ app.post("/add/:name/:year/:rank", (req, res) => {
           let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
           let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
           db.query(sqlInsert, newbody, (err, result) => {
-            if (err) console.log("Error: " + err);
+            if (err){
+              connect();
+              nodenum=3
+              passnum=0
+              logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+              db.query(log, logbody, (err, result) => {
+                console.log("Success - added log node 2")
+              })
+              console.log("Error: " + err);
+            }
             console.log("Success -  added node 3", newbody)
           })
           db.query(log, logbody, (err, result) => {
