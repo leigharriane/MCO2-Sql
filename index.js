@@ -63,7 +63,7 @@ app.get("/getdata", (req, res) => {
     connect();
     db.query(readLog, (err, result) => {
       logArray = logArray.concat(result);
-      console.log("result node 1", result);
+     // console.log("result node 1", result);
 
       console.log("log Array from node 1 " + logArray[0]);
 
@@ -71,7 +71,7 @@ app.get("/getdata", (req, res) => {
       connect2();
       db.query(readLog, (err, result) => {
         logArray = logArray.concat(result);
-        console.log("result node 2", logArray);
+       // console.log("result node 2", logArray);
        // logArray = logArray.concat(result)
       //  console.log("log Array from node 2 " + logArray[0]);
         // console.log("logarray ito "+ logArray);
@@ -81,7 +81,7 @@ app.get("/getdata", (req, res) => {
       connect3();
       db.query(readLog, (err, result) => {
         logArray = logArray.concat(result);
-        console.log("result node 3", logArray);
+       // console.log("result node 3", logArray);
      //   logArray = logArray.concat(result)
       //  console.log("log Array from node 3 " + logArray[0]);
         // console.log("logarray ito "+ logArray);
@@ -100,13 +100,12 @@ app.get("/getdata", (req, res) => {
           pass: logArray[i].pass
         }
         var push_body = {
-          name: logArray[i].movie_name,
           id: logArray[i].movie_id,
+          name: logArray[i].movie_name,
           year: logArray[i].movie_year,
           rank: logArray[i].movie_rank
         }
 
-        console.log("operation" + push_operations.operation );
 
         if(push_operations.node == 1 && push_operations.pass == 0) {
           connect();
@@ -116,7 +115,11 @@ app.get("/getdata", (req, res) => {
         }
         if (push_operations.node == 2 && push_operations.pass == 0) {
           connect2();
+          console.log("WENT HERE IN NODE 2");
+          console.log("pushbody", push_body);
           db.query(push_operations.operation, push_body, (err, result) => {
+            if (err){ console.log("Error: " + err);}
+
             console.log("node 2 success  "+ push_operations.operation)
           })
         }
@@ -129,7 +132,7 @@ app.get("/getdata", (req, res) => {
       };
     
 
-      connect(); //change to your node
+      connect2(); //change to your node
       db.query(sqlRead, (err, result) => {
         if (err) console.log("ERROR: " + err);
         // result.sort((a, b) => (a.id < b.id ? 1 : b.id < a.id ? -1 : 0));
