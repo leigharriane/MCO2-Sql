@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // READ DATA
 app.get("/getdata", (req, res) => {
-  const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT ${limit}`;
+  const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id  DESC LIMIT ${limit}`;
   const readLog = 'SELECT * FROM stadvdbmco2.table_logs WHERE pass = 0';
   // CENTRAL NODE IS NOT ONLINE
   try {
@@ -79,10 +79,20 @@ app.get("/getdata", (req, res) => {
           year: logArray[i].movie_year,
           rank: logArray[i].movie_rank
         }
+
+        
         if (push_operations.node == 1 && push_operations.pass == 0) {
           connect();
           db.query(push_operations.operation, push_body, (err, result) => {
             console.log("node 1 success  " + push_operations.operation)
+            if (err) {
+              var update_log = {
+                movie_id: push_body.id, 
+                movie_year: push_body.year, 
+                operation: push_operations.operation, 
+                node: push_operations.node, 
+                pass: 0
+              }
 
             var update_log = {
               movie_id: push_body.id, 
@@ -97,19 +107,34 @@ app.get("/getdata", (req, res) => {
             } else {
               connect3();
             }
+            
             //update logs either node 2 or node 3
 
             db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ?  ",[update_log, update_log.movie_id, update_log.operation],(err, result) => {
               if (!err)
               console.log("UPDATED LOG!");
             });
+          }
 
           })
         }
         if (push_operations.node == 2 && push_operations.pass == 0) {
           connect2();
           db.query(push_operations.operation, push_body, (err, result) => {
-            if (err) {}
+           
+           
+            if (err) {
+              var update_log = {
+                movie_id: push_body.id, 
+                movie_year: push_body.year, 
+                operation: push_operations.operation, 
+                node: push_operations.node, 
+                pass: 0
+              }
+
+
+            }
+
             var update_log = {
               movie_id: push_body.id, 
               movie_year: push_body.year, 
@@ -117,14 +142,22 @@ app.get("/getdata", (req, res) => {
               node: push_operations.node, 
               pass: 1 
             }
+
             //update logs from the central node
-            connect();
-            db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ?  ",[update_log, update_log.movie_id, update_log.operation],(err, result) => {
+            
+            if (connect2() ){
               if (!err)
-              console.log("UPDATED LOG!");
-            });
+              connect();
+                db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ?  ",[update_log, update_log.movie_id, update_log.operation],(err, result) => {
+                  if (!err)
+                  console.log("UPDATED LOG!");
+                });
+              }
+            
+           
             connect2();
             console.log("node 2 success  " + push_operations.operation)
+
           });
 
         }
@@ -132,6 +165,14 @@ app.get("/getdata", (req, res) => {
         if (push_operations.node == 3 && push_operations.pass == 0) {
           connect3();// connect node 3
           db.query(push_operations.operation, push_body, (err, result) => {
+            if (err) {
+              var update_log = {
+                movie_id: push_body.id, 
+                movie_year: push_body.year, 
+                operation: push_operations.operation, 
+                node: push_operations.node, 
+                pass: 0
+              }
 
             var update_log = {
               movie_id: push_body.id, 
@@ -140,6 +181,20 @@ app.get("/getdata", (req, res) => {
               node: push_operations.node, 
               pass: 1 
             }
+
+            if (connect3() ){
+              if (!err)
+              //update logs from the central node
+            connect();
+            console.log("update_log", update_log)
+            console.log("update_log.movie_id", update_log.movie_id)
+
+            db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ?  ",[update_log, update_log.movie_id, update_log.operation],(err, result) => {
+              if (!err)
+              console.log("UPDATED LOG!");
+            });
+
+              }
             
             //update logs from the central node
             connect();
@@ -153,10 +208,10 @@ app.get("/getdata", (req, res) => {
             connect3();
 
             console.log("node 3 success  " + push_operations.operation)
+          }
           });
         };
       };
-
       connect(); //change to your node
       db.query(sqlRead, (err, result) => {
         if (err) console.log("ERROR: " + err);
@@ -164,7 +219,6 @@ app.get("/getdata", (req, res) => {
         res.send(result);
       });
     })
-
     // console.log(logArray[0])
 
 
@@ -507,7 +561,7 @@ app.post("/add/:name/:year/:rank", (req, res) => {
               connect();
               nodenum = 2
               passnum = 0
-              logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+              let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
               db.query(log, logbody, (err, result) => {
                 console.log("Success - added log node 2")
               })
