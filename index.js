@@ -84,7 +84,6 @@ app.get("/getdata", (req, res) => {
           db.query(push_operations.operation, push_body, (err, result) => {
             console.log("node 1 success  " + push_operations.operation)
 
-
             var update_log = {
               movie_id: push_body.id, 
               movie_year: push_body.year, 
