@@ -48,7 +48,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // READ DATA
 app.get("/getdata", (req, res) => {
-  const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT ${limit}`;
+  const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id ASC LIMIT ${limit}`;
   const readLog = 'SELECT * FROM stadvdbmco2.table_logs WHERE pass = 0';
   // CENTRAL NODE IS NOT ONLINE
   try {
@@ -162,8 +162,7 @@ app.get("/getdata", (req, res) => {
         };
       };
 
-
-      connect2(); //change to your node
+      connect(); //change to your node
       db.query(sqlRead, (err, result) => {
         if (err) console.log("ERROR: " + err);
         // result.sort((a, b) => (a.id < b.id ? 1 : b.id < a.id ? -1 : 0));
