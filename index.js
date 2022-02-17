@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // READ DATA
 app.get("/getdata", (req, res) => {
-  const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id ASC LIMIT ${limit}`;
+  const sqlRead = `SELECT * FROM stadvdbmco2.movies ORDER by id DESC LIMIT ${limit}`;
   const readLog = 'SELECT * FROM stadvdbmco2.table_logs WHERE pass = 0';
   // CENTRAL NODE IS NOT ONLINE
   try {
