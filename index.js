@@ -293,6 +293,7 @@ app.delete("/delete/:id/:year", (req, res) => {
 
         }
 
+        connect2();
         nodenum = 2
         passnum = 1
         let logbody = { movie_id: movieId, movie_year: movieYear, operation: sqlDelete, node: nodenum, pass: passnum }
@@ -313,12 +314,13 @@ app.delete("/delete/:id/:year", (req, res) => {
           nodenum = 3
           passnum = 0
           db.query(log, logbody, (err, result) => {
-            console.log("Success - added log node 2")  // adds a failed log to the central node when node 3 is down
+            console.log("Success - added log node 3")  // adds a failed log to the central node when node 3 is down
           })
           console.log("Error: " + err);
         }
         console.log("Success-delete node 3")
 
+        connect3();
         nodenum = 3
         passnum = 1
         let logbody = { movie_id: movieId, movie_year: movieYear, operation: sqlDelete, node: nodenum, pass: passnum }
