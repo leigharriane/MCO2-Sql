@@ -120,8 +120,8 @@ app.get("/getdata", (req, res) => {
               //update logs either node 2 or node 3
               //implements the log according the its operation on either node 2 or node 3  
               db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ?  ", [update_log, update_log.movie_id, update_log.operation], (err, result) => {
-                if (!err)
-                  console.log("UPDATED LOG!");
+                if (!err){}
+                  // console.log("UPDATED LOG!");
               });
             }
 
@@ -131,7 +131,6 @@ app.get("/getdata", (req, res) => {
           connect2();
           db.query(push_operations.operation, push_body, (err, result) => {
 
-
             if (err) {
               var update_log = {
                 movie_id: push_body.id,
@@ -140,49 +139,8 @@ app.get("/getdata", (req, res) => {
                 node: push_operations.node,
                 pass: 0
               }
-
-
             }
-
-            var update_log = {
-              movie_id: push_body.id,
-              movie_year: push_body.year,
-              operation: push_operations.operation,
-              node: push_operations.node,
-              pass: 1
-            }
-
-
-
-            if (connect2()) {
-              if (!err)
-                connect();
-              db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ?  ", [update_log, update_log.movie_id, update_log.operation], (err, result) => {
-                if (!err)
-                  console.log("UPDATED LOG!");
-              });
-            }
-
-
-            connect2();
-            console.log("node 2 success  " + push_operations.operation)
-
-          });
-
-        }
-
-        if (push_operations.node == 3 && push_operations.pass == 0) {
-          connect3(); // connect node 3
-          db.query(push_operations.operation, push_body, (err, result) => {
-            if (err) {
-              var update_log = {
-                movie_id: push_body.id,
-                movie_year: push_body.year,
-                operation: push_operations.operation,
-                node: push_operations.node,
-                pass: 0
-              }
-
+            else {
               var update_log = {
                 movie_id: push_body.id,
                 movie_year: push_body.year,
@@ -190,34 +148,67 @@ app.get("/getdata", (req, res) => {
                 node: push_operations.node,
                 pass: 1
               }
+            }
+        
+            connect();
+            db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ? AND node = 2", [update_log, update_log.movie_id, update_log.operation], (err, result) => {
+              if (!err)
+                console.log("UPDATED LOG!");
+            });
 
-              if (connect3()) {
-                if (!err)
-                  //update logs from the central node
-                  connect();
-                console.log("update_log", update_log)
-                console.log("update_log.movie_id", update_log.movie_id)
+            connect2();
+            console.log("node 2 success  " + push_operations.operation)
+          });
 
-                db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ?  ", [update_log, update_log.movie_id, update_log.operation], (err, result) => {
-                  if (!err)
-                    console.log("UPDATED LOG!");
-                });
+        }
 
+        if (push_operations.node == 3 && push_operations.pass == 0) {
+          connect3(); // connect node 3
+          db.query(push_operations.operation, push_body, (err, result) => {
+
+            if (err) {
+              var update_log = {
+                movie_id: push_body.id,
+                movie_year: push_body.year,
+                operation: push_operations.operation,
+                node: push_operations.node,
+                pass: 0
               }
+            }
+            else {
+              var update_log = {
+                movie_id: push_body.id,
+                movie_year: push_body.year,
+                operation: push_operations.operation,
+                node: push_operations.node,
+                pass: 1
+              }
+            }
+             
+            connect();
+            // console.log("update_log", update_log)
+            // console.log("update_log.movie_id", update_log.movie_id)
+
+            db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ? AND node = 3", [update_log, update_log.movie_id, update_log.operation], (err, result) => {
+              if (!err){}
+                // console.log("UPDATED LOG!");
+            });
+
+              
 
               //update logs from the central node
-              connect();
-              console.log("update_log", update_log)
-              console.log("update_log.movie_id", update_log.movie_id)
+              // connect();
+              // console.log("update_log", update_log)
+              // console.log("update_log.movie_id", update_log.movie_id)
 
-              db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ?  ", [update_log, update_log.movie_id, update_log.operation], (err, result) => {
-                if (!err)
-                  console.log("UPDATED LOG!");
-              });
-              connect3();
+              // db.query("UPDATE stadvdbmco2.table_logs SET ? WHERE movie_id = ? AND operation = ? AND node = 1", [update_log, update_log.movie_id, update_log.operation], (err, result) => {
+              //   if (!err)
+              //     console.log("UPDATED LOG!");
+              // });
+              // connect3();
 
-              console.log("node 3 success  " + push_operations.operation)
-            }
+              // console.log("node 3 success  " + push_operations.operation)
+            
           });
         };
       };
@@ -309,11 +300,7 @@ app.delete("/delete/:id/:year", (req, res) => {
           console.log("Success - added log - delete node 2")  // adds a success log in the central node
         })
 
-
       })
-
-
-
 
     } else {
       connect3() // when movie is  equal or greater than 1980
@@ -382,7 +369,7 @@ app.delete("/delete/:id/:year", (req, res) => {
         console.log("Success-delete node 3")
         nodenum = 3
         passnum = 1
-        let logbody = { movie_id: movieId, movie_year: movieYear, operation: sqlDelete, node: nodenum, pass: passnum }
+        logbody = { movie_id: movieId, movie_year: movieYear, operation: sqlDelete, node: nodenum, pass: passnum }
         db.query(log, logbody, (err, result) => {
           console.log("Success - added log - delete")
         })
@@ -576,7 +563,7 @@ app.post("/add/:name/:year/:rank", (req, res) => {
         })
 
         if (movieYear < 1980) { // movie year below 1980
-          connect2()
+          connect2();
           nodenum = 2
           passnum = 1
           let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
@@ -597,22 +584,22 @@ app.post("/add/:name/:year/:rank", (req, res) => {
           db.query(log, logbody, (err, result) => {
             console.log("Success - added log node 2")
           })
-        } else { // movie year is equal or greater than 1980
-          connect3()
+        } else if (movieYear >= 1980){ // movie year is equal or greater than 1980
+          connect3();
           nodenum = 3
           passnum = 1
           let newbody = { id: newId, name: movieName, year: movieYear, rank: movieRank }
           let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
           db.query(sqlInsert, newbody, (err, result) => {  // adds the movie to node 3
             if (err) {
+              console.log("Error: " + err);
               connect();
               nodenum = 3
               passnum = 0
-              logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
+              let logbody = { movie_id: newId, movie_name: movieName, movie_year: movieYear, movie_rank: movieRank, operation: sqlInsert, node: nodenum, pass: passnum }
               db.query(log, logbody, (err, result) => {
-                console.log("Success - added log node 2")
+                console.log("Success - added log node 3")
               })
-              console.log("Error: " + err);
             }
             console.log("Success -  added node 3", newbody)
           })
